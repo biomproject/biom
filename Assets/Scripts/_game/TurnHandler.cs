@@ -122,6 +122,7 @@ public class TurnHandler : MonoBehaviour {
 
 	void DoTurn() {
 		MovePlayer();
+		RedrawPlayer();
 		MoveEnemies();
 		DoFight();
 	}
@@ -153,6 +154,75 @@ public class TurnHandler : MonoBehaviour {
 			furthestCell.setStatus(HexCellStatus.EMPTY);
 			furthestCell.setControlsStatuc(GameControlsStatus.NOTHING);
 		}
+	}
+	private void RedrawPlayer() {
+		HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
+		for (int i = 0; i < playerHexCells.Length; i++) {
+			RedrawPlayerCellFromHexCell(playerHexCells[i]);
+		}
+	}
+
+	private void RedrawPlayerCellFromHexCell(HexCell hexCell) {
+		// TODO: move this finding to a util function
+		PlayerCell playerCellToRedraw = playerCells[Array.FindIndex(playerCells, cell => {
+			return cell.coordinates.ToString() == hexCell.coordinates.ToString();
+		})];
+		string playerCellWallCase = "";
+
+		// order: [NE, E, SE, SW, W, NW]
+		// guess:
+		//		  5
+		//	   4	6
+		//	   3	1
+		//		  2
+
+		HexCell[] playerHexCellNeighbors = hexCell.GetNeighbors();
+		// for (int j = 0; j < playerHexCellNeighbors.Length; j++) {
+		// 	if (playerHexCellNeighbors[j].status == HexCellStatus.PLAYER) {
+		// 		playerCellWallCase += "O";
+		// 	} else {
+		// 		playerCellWallCase += "I";
+		// 	}
+		// }
+
+		if (hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER) {
+			playerCellWallCase += "O";
+		} else {
+			playerCellWallCase += "I";
+		}
+		
+		if (hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER) {
+			playerCellWallCase += "O";
+		} else {
+			playerCellWallCase += "I";
+		}
+
+		if (hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER) {
+			playerCellWallCase += "O";
+		} else {
+			playerCellWallCase += "I";
+		}
+
+		if (hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER) {
+			playerCellWallCase += "O";
+		} else {
+			playerCellWallCase += "I";
+		}
+
+		if (hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER) {
+			playerCellWallCase += "O";
+		} else {
+			playerCellWallCase += "I";
+		}
+
+		if (hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER) {
+			playerCellWallCase += "O";
+		} else {
+			playerCellWallCase += "I";
+		}
+
+		// Debug.Log(playerCellWallCase);
+		playerCellToRedraw.PlayCellWallAnim(playerCellWallCase);
 	}
 	private void MoveEnemies() {}
 	private void DoFight() {}

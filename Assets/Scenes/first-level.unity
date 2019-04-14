@@ -651,8 +651,8 @@ MonoBehaviour:
     z: 10
   - x: 4
     z: 11
-  - x: 3
-    z: 11
+  - x: 4
+    z: 12
   wallCoordinates:
   - x: 3
     z: 3
