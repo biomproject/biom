@@ -72,9 +72,9 @@ public struct HexCoordinates {
 	public static Vector3 ToPosition (HexCoordinates hexCoordinates, float y = 5) {
 		float verticalHexCenterDistance = HexMetrics.innerRadius * 2f;
 		float horizontalHexCenterDistance = HexMetrics.outerRadius * 1.5f;
-		float pZ = (hexCoordinates.Z * verticalHexCenterDistance) +
-			(hexCoordinates.X * HexMetrics.innerRadius);
-		float pX = hexCoordinates.X * horizontalHexCenterDistance;
+		float pZ = (hexCoordinates.X * verticalHexCenterDistance) +
+			(hexCoordinates.Z * HexMetrics.innerRadius);
+		float pX = hexCoordinates.Z * horizontalHexCenterDistance;
 
 		return new Vector3(pX, y, pZ);
 	}

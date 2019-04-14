@@ -3,11 +3,11 @@
 [Oo]bj/
 /[Bb]uild/
 [Bb]uilds/
-Assets/AssetStoreTools*
+# Assets/AssetStoreTools*
 # im not 100% in this one
 # Assets/
-Assets/FMODStudioCache.asset
-Assets/StreamingAssets/*.bank
+# Assets/FMODStudioCache.asset
+# Assets/StreamingAssets/*.bank
 fmod.log
 fmod_editor.log
 .cache/
@@ -41,6 +41,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-
 dist/
-dist_mac.app
+dist_mac.app/

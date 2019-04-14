@@ -62,7 +62,7 @@ public class HexGrid: MonoBehaviour {
 		HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
 		cell.transform.SetParent(transform, false);
 		cell.transform.localPosition = position;
-		cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+		cell.coordinates = HexCoordinates.FromOffsetCoordinates(z, x);
 	}
 
 	void Start () {
@@ -112,6 +112,10 @@ public class HexGrid: MonoBehaviour {
 	}
 	public HexCell[] getCellsByStatus(GameControlsStatus status) {
 		return Array.FindAll(cells, c => c.controlsStatus == status);
+	}
+
+	public HexCell[] getCellsByNotStatus(HexCellStatus status) {
+		return Array.FindAll(cells, c => c.status != status);
 	}
 
 }
