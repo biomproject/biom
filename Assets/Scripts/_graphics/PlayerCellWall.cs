@@ -37,6 +37,10 @@ public static class PlayerCellWall {
                     rotateDegree = (i + 1) * 60;
                 } else if (result == PlayerCellWallCase.OIIOOI) {
                     rotateDegree = (i + 1) * 60;
+                } else if (result == PlayerCellWallCase.IOOIOO) {
+                    rotateDegree = (i + 1) * 60;
+                } else if (result == PlayerCellWallCase.IOIOOO) {
+                    rotateDegree = (i - 1) * 60;
                 } else {
                     rotateDegree = i * 60;
                 }
