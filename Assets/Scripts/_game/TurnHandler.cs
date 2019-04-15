@@ -82,6 +82,9 @@ public class TurnHandler : MonoBehaviour {
 	void DrawHoverAndFurthest() {
 		// check if there is a touched cell
 		if (!hexGrid.touchedCell) {
+			if (hoveredPlayerCell) {
+				Destroy(hoveredPlayerCell.transform.gameObject);
+			}
 			return;
 		}
 

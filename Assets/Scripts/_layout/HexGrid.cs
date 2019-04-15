@@ -82,7 +82,7 @@ public class HexGrid: MonoBehaviour {
 		if (Input.GetMouseButton(0)) {
 			HandleInput();
 		} else if (touchedCell) {
-			touchedCell.setControlsStatuc(GameControlsStatus.NOTHING);
+			touchedCell = null;
 		}
 
 		hexMesh.Triangulate(cells);
@@ -94,6 +94,13 @@ public class HexGrid: MonoBehaviour {
 		if (Physics.Raycast(inputRay, out hit)) {
 			TouchCell(hit.point);
 		}
+		if (touchedCell && Array.FindIndex(touchedCell.GetNeighbors(), neighbor => neighbor.status == HexCellStatus.PLAYER) == -1) {
+			touchedCell = null;
+		}
+		if (touchedCell && touchedCell.status == HexCellStatus.PLAYER) {
+			touchedCell = null;
+		}
+
 	}
 	
 	void TouchCell (Vector3 position) {
