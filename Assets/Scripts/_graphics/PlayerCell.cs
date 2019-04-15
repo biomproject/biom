@@ -6,18 +6,22 @@ using UnityEngine.UI;
 public class PlayerCell : MonoBehaviour {
     public HexCoordinates coordinates;
     private Animator anim;
+    private Transform shine;
 
     void Awake() {
         anim = GetComponent<Animator>();
+        foreach (Transform eachChild in transform) {
+            if (eachChild.name == "Shine") {
+                shine = eachChild;
+            }
+        }
     }
 
     public void PlayTargetingAnim() {
         anim.Play("bubble_target");
+        SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
+        sr.transform.Translate(1000, 1000, 1000);
     }
-    public void PlayDefaultAnim() {
-        anim.Play("bubble_anim");
-    }
-
     public void PlayCellWallAnim(PlayerCellWallCase wallCase) {
         Tuple<PlayerCellWallCase, int> archeTypeAndDegree = PlayerCellWall.GetArcheTypeAndDegree(wallCase);
         anim.Play(archeTypeAndDegree.Item1.ToString());

@@ -27,6 +27,6 @@ public class CellCore: MonoBehaviour {
 	    // Fraction of journey completed = current distance divided by total distance.
 	    float fracJourney = distCovered / journeyLength;
 
-	    transform.position = Vector3.Lerp(startPos, endPos, fracJourney);
+	    transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
     }
 }
