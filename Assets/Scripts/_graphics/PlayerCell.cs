@@ -7,12 +7,16 @@ public class PlayerCell : MonoBehaviour {
     public HexCoordinates coordinates;
     private Animator anim;
     private Transform shine;
+    private Transform redBloodCells;
 
     void Awake() {
         anim = GetComponent<Animator>();
-        foreach (Transform eachChild in transform) {
-            if (eachChild.name == "Shine") {
-                shine = eachChild;
+        foreach (Transform child in transform) {
+            if (child.name == "Shine") {
+                shine = child;
+            }
+            if (child.name == "RedBloodCells") {
+                redBloodCells = child;
             }
         }
     }
@@ -21,6 +25,8 @@ public class PlayerCell : MonoBehaviour {
         anim.Play("bubble_target");
         SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
         sr.transform.Translate(1000, 1000, 1000);
+        SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
+        sr2.transform.Translate(1000, 1000, 1000);
     }
     public void PlayCellWallAnim(PlayerCellWallCase wallCase) {
         Tuple<PlayerCellWallCase, int> archeTypeAndDegree = PlayerCellWall.GetArcheTypeAndDegree(wallCase);
