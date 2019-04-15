@@ -15,6 +15,8 @@ public class TurnHandler : MonoBehaviour {
 	public Tile tilePrefab;
 	PlayerCell[] playerCells;
 	PlayerCell hoveredPlayerCell;
+	public CellCore cellCorePrefab;
+	CellCore cellCore;
 	HexDirection hoveredCellOpensToThisDirection;
 
 	void Awake () {
@@ -36,6 +38,8 @@ public class TurnHandler : MonoBehaviour {
 			playerCells[i].transform.position = HexCoordinates.ToPosition(currentLevel.playerCoordinates[i], -1);
 			playerCells[i].coordinates = currentLevel.playerCoordinates[i];
 		}
+		cellCore = Instantiate<CellCore>(cellCorePrefab);
+		cellCore.transform.position = HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2);
 	}
 
 	void InitTiles() {
@@ -172,6 +176,9 @@ public class TurnHandler : MonoBehaviour {
 			hoveredCell.setControlsStatuc(GameControlsStatus.NOTHING);
 			furthestCell.setStatus(HexCellStatus.EMPTY);
 			furthestCell.setControlsStatuc(GameControlsStatus.NOTHING);
+
+			// move player cell
+			cellCore.MoveCellCore(HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2));
 		}
 	}
 	private void RedrawPlayer() {
@@ -293,6 +300,7 @@ public class TurnHandler : MonoBehaviour {
 
 		playerCellToRedraw.PlayCellWallAnim(playerCellWallCase);
 	}
+
 	private void MoveEnemies() {}
 	private void DoFight() {}
 }
