@@ -15,6 +15,7 @@ public class TurnHandler : MonoBehaviour {
 	public Tile tilePrefab;
 	PlayerCell[] playerCells;
 	PlayerCell hoveredPlayerCell;
+	HexDirection hoveredCellOpensToThisDirection;
 
 	void Awake () {
 		scriptUsageTimeline = GameObject.Find("Music Player").GetComponent<ScriptUsageTimeline>();
@@ -50,6 +51,7 @@ public class TurnHandler : MonoBehaviour {
 		ResetDraw();
 		DrawNeighbors();
 		DrawHoverAndFurthest();
+		RedrawPlayer();
 
 		if (previousBeat != scriptUsageTimeline.timelineInfo.currentMusicBar) {
 			previousBeat = scriptUsageTimeline.timelineInfo.currentMusicBar;
@@ -106,6 +108,13 @@ public class TurnHandler : MonoBehaviour {
 			hoveredPlayerCell = Instantiate<PlayerCell>(playerCellPrefab);
 			hoveredPlayerCell.transform.position = HexCoordinates.ToPosition(hexGrid.touchedCell.coordinates, -1);
 			hoveredPlayerCell.coordinates = hexGrid.touchedCell.coordinates;
+			Tuple<int, HexDirection> foundTouchedDirection = PlayerCellWall.FindTouchedRotation(hexGrid.touchedCell);
+			hoveredCellOpensToThisDirection = foundTouchedDirection.Item2;
+			hoveredPlayerCell.transform.eulerAngles =  new Vector3(
+				hoveredPlayerCell.transform.eulerAngles.x,
+				foundTouchedDirection.Item1,
+				hoveredPlayerCell.transform.eulerAngles.z
+			);
 			hoveredPlayerCell.PlayTargetingAnim();
 			return;
 		}
@@ -116,6 +125,13 @@ public class TurnHandler : MonoBehaviour {
 			hoveredPlayerCell = Instantiate<PlayerCell>(playerCellPrefab);
 			hoveredPlayerCell.transform.position = HexCoordinates.ToPosition(hexGrid.touchedCell.coordinates, -1);
 			hoveredPlayerCell.coordinates = hexGrid.touchedCell.coordinates;
+			Tuple<int, HexDirection> foundTouchedDirection = PlayerCellWall.FindTouchedRotation(hexGrid.touchedCell);
+			hoveredCellOpensToThisDirection = foundTouchedDirection.Item2;
+			hoveredPlayerCell.transform.eulerAngles =  new Vector3(
+				hoveredPlayerCell.transform.eulerAngles.x,
+				foundTouchedDirection.Item1,
+				hoveredPlayerCell.transform.eulerAngles.z
+			);
 			hoveredPlayerCell.PlayTargetingAnim();
 		}
 	}
@@ -170,58 +186,108 @@ public class TurnHandler : MonoBehaviour {
 		string playerCellWallCase = "";
 
 		// order: [NE, E, SE, SW, W, NW]
-		// guess:
-		//		  5
-		//	   4	6
-		//	   3	1
-		//		  2
+		//		  E
+		//	  SE	NE
+		//	  SW	NW
+		//		  W
 
 		HexCell[] playerHexCellNeighbors = hexCell.GetNeighbors();
-		// for (int j = 0; j < playerHexCellNeighbors.Length; j++) {
-		// 	if (playerHexCellNeighbors[j].status == HexCellStatus.PLAYER) {
-		// 		playerCellWallCase += "O";
-		// 	} else {
-		// 		playerCellWallCase += "I";
-		// 	}
-		// }
-
-		if (hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER) {
+		if (
+			(hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER)
+			||
+			(
+				(hexCell.GetNeighbor(HexDirection.NE).controlsStatus == GameControlsStatus.HOVERED)
+				&&
+				hoveredCellOpensToThisDirection is Enum
+				&&
+				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.NE)
+			)
+		) {
 			playerCellWallCase += "O";
 		} else {
 			playerCellWallCase += "I";
 		}
 		
-		if (hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER) {
+		if (
+			(hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER)
+			||
+			(
+				(hexCell.GetNeighbor(HexDirection.E).controlsStatus == GameControlsStatus.HOVERED)
+				&&
+				hoveredCellOpensToThisDirection is Enum
+				&&
+				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.E)
+			)
+		) {
 			playerCellWallCase += "O";
 		} else {
 			playerCellWallCase += "I";
 		}
 
-		if (hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER) {
+		if (
+			(hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER)
+			||
+			(
+				(hexCell.GetNeighbor(HexDirection.SE).controlsStatus == GameControlsStatus.HOVERED)
+				&&
+				hoveredCellOpensToThisDirection is Enum
+				&&
+				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.SE)
+			)
+		) {
 			playerCellWallCase += "O";
 		} else {
 			playerCellWallCase += "I";
 		}
 
-		if (hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER) {
+		if (
+			(hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER)
+			||
+			(
+				(hexCell.GetNeighbor(HexDirection.SW).controlsStatus == GameControlsStatus.HOVERED)
+				&&
+				hoveredCellOpensToThisDirection is Enum
+				&&
+				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.SW)
+			)
+		) {
 			playerCellWallCase += "O";
 		} else {
 			playerCellWallCase += "I";
 		}
 
-		if (hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER) {
+		if (
+			(hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER)
+			||
+			(
+				(hexCell.GetNeighbor(HexDirection.W).controlsStatus == GameControlsStatus.HOVERED)
+				&&
+				hoveredCellOpensToThisDirection is Enum
+				&&
+				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.W)
+			)
+		) {
 			playerCellWallCase += "O";
 		} else {
 			playerCellWallCase += "I";
 		}
 
-		if (hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER) {
+		if (
+			(hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER)
+			||
+			(
+				(hexCell.GetNeighbor(HexDirection.NW).controlsStatus == GameControlsStatus.HOVERED)
+				&&
+				hoveredCellOpensToThisDirection is Enum
+				&&
+				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.NW)
+			)
+		) {
 			playerCellWallCase += "O";
 		} else {
 			playerCellWallCase += "I";
 		}
 
-		// Debug.Log(playerCellWallCase);
 		playerCellToRedraw.PlayCellWallAnim(playerCellWallCase);
 	}
 	private void MoveEnemies() {}

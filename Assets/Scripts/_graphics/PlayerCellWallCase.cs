@@ -24,5 +24,7 @@ public enum PlayerCellWallCase {
     OIOOII, // this sprite is swapped with the other because of reasons
     IIIOOI,
     IIOOOI,
-    OIIOOI // this sprite is swapped with the other because of reasons
+    OIIOOI, // this sprite is swapped with the other because of reasons
+    OOOOOO
+
 }
