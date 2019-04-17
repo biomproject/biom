@@ -17,6 +17,8 @@ public class TurnHandler : MonoBehaviour {
 	PlayerCell hoveredPlayerCell;
 	public CellCore cellCorePrefab;
 	CellCore cellCore;
+	public Enemy enemyPrefab;
+	Enemy[] enemyCells;
 	HexDirection hoveredCellOpensToThisDirection;
 
 	void Awake () {
@@ -25,11 +27,13 @@ public class TurnHandler : MonoBehaviour {
 		hexMesh = GameObject.Find("Hex Mesh").GetComponent<HexMesh>();
 		currentLevel = GameObject.Find("First Level").GetComponent<FirstLevel>();
 		playerCells = new PlayerCell[currentLevel.playerCoordinates.Length];
+		enemyCells = new Enemy[currentLevel.enemyCoordinates.Length];
 	}
 
 	void Start () {
 		InitPlayer();
 		InitTiles();
+		InitEnemies();
 	}
 
 	void InitPlayer() {
@@ -48,6 +52,14 @@ public class TurnHandler : MonoBehaviour {
 			Tile tile = Instantiate<Tile>(tilePrefab);
 			tile.transform.position = HexCoordinates.ToPosition(emptyCells[i].coordinates, -5);
 			tile.PlayRandomAnim();
+		}
+	}
+
+	void InitEnemies() {
+		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
+			enemyCells[i] = Instantiate<Enemy>(enemyPrefab);
+			enemyCells[i].transform.position = HexCoordinates.ToPosition(currentLevel.enemyCoordinates[i], -1);
+			enemyCells[i].coordinates = currentLevel.enemyCoordinates[i];
 		}
 	}
 
@@ -146,7 +158,7 @@ public class TurnHandler : MonoBehaviour {
 	void DoTurn() {
 		MovePlayer();
 		RedrawPlayer();
-		MoveEnemies();
+		MoveNotEatenEnemies();
 		DoFight();
 	}
 
@@ -157,15 +169,30 @@ public class TurnHandler : MonoBehaviour {
 			HexCell hoveredCell = hoveredCells[0];
 			HexCell furthestCell = furthestCells[0];
 
-			// create/destroy player objects
+			// create/destroy player and enemy objects
 			int removedPlayerCellIndex = Array.FindIndex(playerCells, cell => {
 				return cell.coordinates.ToString() == furthestCell.coordinates.ToString();
 			});
+			Enemy enemyToMove = playerCells[removedPlayerCellIndex].isEating;
+			if (enemyToMove) {
+				HexCell playerCellHex = Array.Find(hexGrid.cells, cell => cell.coordinates.ToString() == playerCells[removedPlayerCellIndex].coordinates.ToString());
+				HexCell[] possiblePositions = playerCellHex.GetNeighbors();
+				HexCell target = Array.Find(possiblePositions, cell => {
+					return cell.status == HexCellStatus.PLAYER;
+				});
+				enemyToMove.ChangePosition(target.coordinates);
+			}
+
 			Destroy(playerCells[removedPlayerCellIndex].transform.gameObject);
 	
 			playerCells[removedPlayerCellIndex] = Instantiate<PlayerCell>(playerCellPrefab);
 			playerCells[removedPlayerCellIndex].transform.position = HexCoordinates.ToPosition(hoveredCell.coordinates, -1);
 			playerCells[removedPlayerCellIndex].coordinates = hoveredCell.coordinates;
+
+			if (enemyToMove) {
+				playerCells[removedPlayerCellIndex].isEating = enemyToMove;
+				enemyToMove.beingEatenBy = playerCells[removedPlayerCellIndex];
+			}
 
 			if (hoveredPlayerCell) {
 				Destroy(hoveredPlayerCell.transform.gameObject);
@@ -177,7 +204,7 @@ public class TurnHandler : MonoBehaviour {
 			furthestCell.setStatus(HexCellStatus.EMPTY);
 			furthestCell.setControlsStatuc(GameControlsStatus.NOTHING);
 
-			// move player cell
+			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2));
 
 			// no touching with the koton
@@ -304,6 +331,32 @@ public class TurnHandler : MonoBehaviour {
 		playerCellToRedraw.PlayCellWallAnim(playerCellWallCase);
 	}
 
-	private void MoveEnemies() {}
-	private void DoFight() {}
+	private void MoveNotEatenEnemies() {
+		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
+			if (enemyCells[i].isEaten) {
+				return;
+			}
+			HexCell currentEnemyCell = Array.Find(hexGrid.cells, cell => cell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
+			HexCoordinates target = currentEnemyCell.GetNeighbor(HexDirection.SW).coordinates;
+			enemyCells[i].ChangePosition(target);
+			enemyCells[i].coordinates = target;
+		}
+	}
+	private void DoFight() {
+		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
+			if (enemyCells[i].hp < 1) {
+				return;
+			}
+			PlayerCell cellEating = Array.Find(playerCells, cell => cell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
+			if (!cellEating) {
+				return;
+			}
+
+			enemyCells[i].isEaten = true;
+			enemyCells[i].SetHp(enemyCells[i].hp - 1);
+			enemyCells[i].beingEatenBy = cellEating;
+			cellEating.isEating = enemyCells[i];
+			Debug.Log(enemyCells[i].hp);
+		}
+	}
 }

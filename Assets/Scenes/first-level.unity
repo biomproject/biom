@@ -329,7 +329,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b004ab3a1fd6054eae76769e1db1bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragSpeed: 2
 --- !u!54 &534669907
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -651,8 +650,8 @@ MonoBehaviour:
     z: 10
   - x: 4
     z: 11
-  - x: 4
-    z: 12
+  - x: 3
+    z: 11
   wallCoordinates:
   - x: 3
     z: 3
@@ -734,6 +733,9 @@ MonoBehaviour:
     z: 9
   - x: 9
     z: 9
+  enemyCoordinates:
+  - x: 3
+    z: 14
 --- !u!1 &1986667201
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,6 +814,8 @@ MonoBehaviour:
   tilePrefab: {fileID: 7345143597230891598, guid: 6fcc1439825745a4ca1677e8b59952ea,
     type: 3}
   cellCorePrefab: {fileID: 5340044223299270335, guid: 4915b4e37ac0bb745b26e8224d097896,
+    type: 3}
+  enemyPrefab: {fileID: 872255826910014003, guid: b9e46eded05c3e04b82e87149b47ad4e,
     type: 3}
 --- !u!4 &2092190184
 Transform:

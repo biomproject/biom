@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerCell : MonoBehaviour {
     public HexCoordinates coordinates;
+    public Enemy isEating;
     private Animator wallAnim;
     private Transform shine;
     private Transform redBloodCells;

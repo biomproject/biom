@@ -6,4 +6,6 @@ public class FirstLevel : MonoBehaviour {
     public HexCoordinates[] playerCoordinates = { new HexCoordinates(1, 1), new HexCoordinates(1, 2), new HexCoordinates(2, 2) };
     // wallElement 3-27: actual walls, a többi ilyen akadály
     public HexCoordinates[] wallCoordinates = { new HexCoordinates(3, 3), new HexCoordinates(2, 3), new HexCoordinates(3, 4) };
+
+    public HexCoordinates[] enemyCoordinates = {};
 }
