@@ -82,7 +82,7 @@ public class HexGrid: MonoBehaviour {
 		if (Input.GetMouseButton(0)) {
 			HandleInput();
 		} else if (touchedCell) {
-			touchedCell = null;
+			// touchedCell = null;
 		}
 
 		hexMesh.Triangulate(cells);
@@ -100,7 +100,6 @@ public class HexGrid: MonoBehaviour {
 		if (touchedCell && touchedCell.status == HexCellStatus.PLAYER) {
 			touchedCell = null;
 		}
-
 	}
 	
 	void TouchCell (Vector3 position) {

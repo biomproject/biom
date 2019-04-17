@@ -105,7 +105,7 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		// draw hover and furthest
-		if (hexGrid.touchedCell && Input.GetMouseButton(0) && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
+		if (hexGrid.touchedCell && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
 			hexGrid.touchedCell.setControlsStatuc(GameControlsStatus.HOVERED);
 			Distance.getFurthestPathCell(hexGrid.touchedCell, hexGrid.getCellsByStatus(HexCellStatus.PLAYER)).setControlsStatuc(GameControlsStatus.FURTHEST);
 		}
@@ -179,6 +179,9 @@ public class TurnHandler : MonoBehaviour {
 
 			// move player cell
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2));
+
+			// no touching with the koton
+			hexGrid.touchedCell = null;
 		}
 	}
 	private void RedrawPlayer() {
