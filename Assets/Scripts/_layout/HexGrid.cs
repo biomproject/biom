@@ -15,6 +15,7 @@ public class HexGrid: MonoBehaviour {
 	HexMesh hexMesh;
 
 	public HexCell touchedCell;
+	public HexCell furthestCell;
 
 	void Awake () {
 		currentLevel = GameObject.Find("First Level").GetComponent<FirstLevel>();

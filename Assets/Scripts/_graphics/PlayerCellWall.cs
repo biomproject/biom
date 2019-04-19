@@ -93,4 +93,41 @@ public static class PlayerCellWall {
 
         return Tuple.Create(rotation - 60, chosenDirection);
     }
+
+    public static Tuple<int, HexDirection> FindFurthestRotation(HexCell furthestCell) {
+        int rotation = 0;
+        HexDirection chosenDirection = HexDirection.NW;
+
+        if (furthestCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER) {
+			rotation = 60 * -1;
+            chosenDirection = HexDirection.NW;
+		}
+		
+		if (furthestCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER) {
+			rotation = 60 * 0;
+            chosenDirection = HexDirection.W;
+		}
+
+		if (furthestCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER) {
+			rotation = 60 * 1;
+            chosenDirection = HexDirection.SW;
+		}
+
+		if (furthestCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER) {
+			rotation = 60 * 2;
+            chosenDirection = HexDirection.SE;
+		}
+
+		if (furthestCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER) {
+			rotation = 60 * 3;
+            chosenDirection = HexDirection.E;
+		}
+
+		if (furthestCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER) {
+			rotation = 60 * 4;
+            chosenDirection = HexDirection.NE;
+		}
+
+        return Tuple.Create(rotation, chosenDirection);
+    }
 }

@@ -16,11 +16,13 @@ public class TurnHandler : MonoBehaviour {
 	public Tile tilePrefab;
 	PlayerCell[] playerCells;
 	PlayerCell hoveredPlayerCell;
+	PlayerCell furthestPlayerCell;
 	public CellCore cellCorePrefab;
 	CellCore cellCore;
 	public Enemy enemyPrefab;
 	Enemy[] enemyCells;
 	HexDirection hoveredCellOpensToThisDirection;
+	HexDirection furthestCellOpensToThisDirection;
 
 	void Awake () {
 		scriptUsageTimeline = GameObject.Find("Music Player").GetComponent<ScriptUsageTimeline>();
@@ -111,9 +113,9 @@ public class TurnHandler : MonoBehaviour {
 
 		// check if touchedCell is a legal move
 		bool isLegal = false;
-		HexCell[] playerCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
-		for (int i = 0; i < playerCells.Length; i++) {
-			if (Array.IndexOf(playerCells[i].GetNeighbors(), hexGrid.touchedCell) > -1) {
+		HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
+		for (int i = 0; i < playerHexCells.Length; i++) {
+			if (Array.IndexOf(playerHexCells[i].GetNeighbors(), hexGrid.touchedCell) > -1) {
 				isLegal = true;
 			}
 		}
@@ -124,7 +126,8 @@ public class TurnHandler : MonoBehaviour {
 		// draw hover and furthest
 		if (hexGrid.touchedCell && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
 			hexGrid.touchedCell.setControlsStatuc(GameControlsStatus.HOVERED);
-			Distance.getFurthestPathCell(hexGrid.touchedCell, hexGrid.getCellsByStatus(HexCellStatus.PLAYER)).setControlsStatuc(GameControlsStatus.FURTHEST);
+			hexGrid.furthestCell = Distance.getFurthestPathCell(hexGrid.touchedCell, hexGrid.getCellsByStatus(HexCellStatus.PLAYER));
+			hexGrid.furthestCell.setControlsStatuc(GameControlsStatus.FURTHEST);
 		}
 
 		// draw playerCells
@@ -158,6 +161,25 @@ public class TurnHandler : MonoBehaviour {
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
 		}
+
+		if (!furthestPlayerCell) {
+			furthestPlayerCell = Array.Find(playerCells, playerCell => playerCell.coordinates.ToString() == hexGrid.furthestCell.coordinates.ToString());
+			furthestPlayerCell.transform.position = HexCoordinates.ToPosition(hexGrid.furthestCell.coordinates, -1);
+			furthestPlayerCell.coordinates = hexGrid.furthestCell.coordinates;
+			Tuple<int, HexDirection> foundFurthestDirection = PlayerCellWall.FindFurthestRotation(hexGrid.furthestCell);
+			furthestCellOpensToThisDirection = foundFurthestDirection.Item2;
+			furthestPlayerCell.RotateWall(foundFurthestDirection.Item1);
+			furthestPlayerCell.PlayTargetingAnim();
+		}
+		if (furthestPlayerCell && (furthestPlayerCell.coordinates.ToString() != hexGrid.furthestCell.coordinates.ToString())) {
+			furthestPlayerCell = Array.Find(playerCells, playerCell => playerCell.coordinates.ToString() == hexGrid.furthestCell.coordinates.ToString());
+			furthestPlayerCell.transform.position = HexCoordinates.ToPosition(hexGrid.furthestCell.coordinates, -1);
+			furthestPlayerCell.coordinates = hexGrid.furthestCell.coordinates;
+			Tuple<int, HexDirection> foundFurthestDirection = PlayerCellWall.FindFurthestRotation(hexGrid.furthestCell);
+			furthestCellOpensToThisDirection = foundFurthestDirection.Item2;
+			furthestPlayerCell.RotateWall(foundFurthestDirection.Item1);
+			furthestPlayerCell.PlayTargetingAnim();
+		}
 	}
 
 	void DoTurn() {
@@ -185,6 +207,7 @@ public class TurnHandler : MonoBehaviour {
 					return cell.status == HexCellStatus.PLAYER;
 				});
 				enemyToMove.ChangePosition(target.coordinates);
+				enemyToMove.SetHp(enemyToMove.hp);
 			}
 
 			Destroy(playerCells[removedPlayerCellIndex].transform.gameObject);
@@ -196,7 +219,6 @@ public class TurnHandler : MonoBehaviour {
 			if (enemyToMove) {
 				playerCells[removedPlayerCellIndex].isEating = enemyToMove;
 				enemyToMove.beingEatenBy = playerCells[removedPlayerCellIndex];
-				enemyToMove.SetHp(enemyToMove.hp);
 			}
 
 			if (hoveredPlayerCell) {
@@ -228,6 +250,9 @@ public class TurnHandler : MonoBehaviour {
 		PlayerCell playerCellToRedraw = playerCells[Array.FindIndex(playerCells, cell => {
 			return cell.coordinates.ToString() == hexCell.coordinates.ToString();
 		})];
+		if (furthestPlayerCell && (playerCellToRedraw.coordinates.ToString() == furthestPlayerCell.coordinates.ToString())) {
+			return;
+		}
 		string playerCellWallCase = "";
 
 		// order: [NE, E, SE, SW, W, NW]
@@ -238,7 +263,9 @@ public class TurnHandler : MonoBehaviour {
 
 		HexCell[] playerHexCellNeighbors = hexCell.GetNeighbors();
 		if (
-			(hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER)
+			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.NE).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.NE))
+			&&
+			((hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER)
 			||
 			(
 				(hexCell.GetNeighbor(HexDirection.NE).controlsStatus == GameControlsStatus.HOVERED)
@@ -246,7 +273,7 @@ public class TurnHandler : MonoBehaviour {
 				hoveredCellOpensToThisDirection is Enum
 				&&
 				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.NE)
-			)
+			))
 		) {
 			playerCellWallCase += "O";
 		} else {
@@ -254,7 +281,9 @@ public class TurnHandler : MonoBehaviour {
 		}
 		
 		if (
-			(hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER)
+			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.E).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.E))
+			&&
+			((hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER)
 			||
 			(
 				(hexCell.GetNeighbor(HexDirection.E).controlsStatus == GameControlsStatus.HOVERED)
@@ -262,7 +291,7 @@ public class TurnHandler : MonoBehaviour {
 				hoveredCellOpensToThisDirection is Enum
 				&&
 				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.E)
-			)
+			))
 		) {
 			playerCellWallCase += "O";
 		} else {
@@ -270,7 +299,9 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
-			(hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER)
+			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.SE).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.SE))
+			&&
+			((hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER)
 			||
 			(
 				(hexCell.GetNeighbor(HexDirection.SE).controlsStatus == GameControlsStatus.HOVERED)
@@ -278,7 +309,7 @@ public class TurnHandler : MonoBehaviour {
 				hoveredCellOpensToThisDirection is Enum
 				&&
 				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.SE)
-			)
+			))
 		) {
 			playerCellWallCase += "O";
 		} else {
@@ -286,7 +317,9 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
-			(hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER)
+			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.SW).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.SW))
+			&&
+			((hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER)
 			||
 			(
 				(hexCell.GetNeighbor(HexDirection.SW).controlsStatus == GameControlsStatus.HOVERED)
@@ -294,7 +327,7 @@ public class TurnHandler : MonoBehaviour {
 				hoveredCellOpensToThisDirection is Enum
 				&&
 				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.SW)
-			)
+			))
 		) {
 			playerCellWallCase += "O";
 		} else {
@@ -302,7 +335,9 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
-			(hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER)
+			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.W).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.W))
+			&&
+			((hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER)
 			||
 			(
 				(hexCell.GetNeighbor(HexDirection.W).controlsStatus == GameControlsStatus.HOVERED)
@@ -310,7 +345,7 @@ public class TurnHandler : MonoBehaviour {
 				hoveredCellOpensToThisDirection is Enum
 				&&
 				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.W)
-			)
+			))
 		) {
 			playerCellWallCase += "O";
 		} else {
@@ -318,7 +353,9 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
-			(hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER)
+			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.NW).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.NW))
+			&&
+			((hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER)
 			||
 			(
 				(hexCell.GetNeighbor(HexDirection.NW).controlsStatus == GameControlsStatus.HOVERED)
@@ -326,7 +363,7 @@ public class TurnHandler : MonoBehaviour {
 				hoveredCellOpensToThisDirection is Enum
 				&&
 				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.NW)
-			)
+			))
 		) {
 			playerCellWallCase += "O";
 		} else {
