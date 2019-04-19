@@ -10,6 +10,7 @@ public class TurnHandler : MonoBehaviour {
 	HexMesh hexMesh;
 	FirstLevel currentLevel;
 	private int previousBeat = 0;
+	private int previousOffbeat = 0;
 
 	public PlayerCell playerCellPrefab;
 	public Tile tilePrefab;
@@ -72,6 +73,10 @@ public class TurnHandler : MonoBehaviour {
 		if (previousBeat != scriptUsageTimeline.timelineInfo.currentMusicBar) {
 			previousBeat = scriptUsageTimeline.timelineInfo.currentMusicBar;
 			DoTurn();
+		}
+		if (previousOffbeat != scriptUsageTimeline.timelineInfo.currentOffbeatBar) {
+			previousOffbeat = scriptUsageTimeline.timelineInfo.currentOffbeatBar;
+			DoFight();
 		}
 	}
 
@@ -159,7 +164,6 @@ public class TurnHandler : MonoBehaviour {
 		MovePlayer();
 		RedrawPlayer();
 		MoveNotEatenEnemies();
-		DoFight();
 	}
 
 	private void MovePlayer() {
@@ -192,6 +196,7 @@ public class TurnHandler : MonoBehaviour {
 			if (enemyToMove) {
 				playerCells[removedPlayerCellIndex].isEating = enemyToMove;
 				enemyToMove.beingEatenBy = playerCells[removedPlayerCellIndex];
+				enemyToMove.SetHp(enemyToMove.hp);
 			}
 
 			if (hoveredPlayerCell) {
@@ -351,7 +356,6 @@ public class TurnHandler : MonoBehaviour {
 			if (!cellEating) {
 				return;
 			}
-
 			enemyCells[i].isEaten = true;
 			enemyCells[i].SetHp(enemyCells[i].hp - 1);
 			enemyCells[i].beingEatenBy = cellEating;

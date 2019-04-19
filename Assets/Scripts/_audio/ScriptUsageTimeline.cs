@@ -31,6 +31,7 @@ public class ScriptUsageTimeline : MonoBehaviour
     public class TimelineInfo
     {
         public int currentMusicBar = 0;
+        public int currentOffbeatBar = 0;
         public FMOD.StringWrapper lastMarker = new FMOD.StringWrapper();
     }
 
@@ -92,6 +93,9 @@ public class ScriptUsageTimeline : MonoBehaviour
                     {
                         var parameter = (FMOD.Studio.TIMELINE_BEAT_PROPERTIES)Marshal.PtrToStructure(parameterPtr, typeof(FMOD.Studio.TIMELINE_BEAT_PROPERTIES));
                         timelineInfo.currentMusicBar = parameter.bar;
+                        if (parameter.beat == 3) {
+                            timelineInfo.currentOffbeatBar = parameter.bar;
+                        }
                     }
                     break;
                 case FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_MARKER:
