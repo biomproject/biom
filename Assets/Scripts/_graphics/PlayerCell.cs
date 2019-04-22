@@ -30,8 +30,6 @@ public class PlayerCell : MonoBehaviour {
     public void PlayTargetingAnim() {
         wallAnim.Play("bubble_target");
         SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
-        Debug.Log(sr.transform.position.ToString());
-        Debug.Log(HexCoordinates.ToPosition(coordinates));
         sr.transform.Translate(1000, 1000, 1000);
         SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
         sr2.transform.Translate(1000, 1000, 1000);
