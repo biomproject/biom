@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CellCore: MonoBehaviour {
 
+	public HexCoordinates coordinates;
     float journeyLength;
     float startTime;
     Vector3 startPos;

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public static class Centering {
-    public static HexCoordinates FindCenter(PlayerCell[] playerCells) {
+	public static PlayerCell FindCenterCell(PlayerCell[] playerCells) {
 		float tX = 0;
 		float tZ = 0;
 		for (int i = 0; i < playerCells.Length; i++) {
@@ -17,6 +17,9 @@ public static class Centering {
 		List<PlayerCell> orderedPlayerCells = new List<PlayerCell>(playerCells);
 		orderedPlayerCells.Sort((a, b) => Distance.AbsDistanceTimes100(a.coordinates, centerCoordinates) - Distance.AbsDistanceTimes100(b.coordinates, centerCoordinates));
 
-		return orderedPlayerCells[0].coordinates;
+		return orderedPlayerCells[0];
+	}
+    public static HexCoordinates FindCenter(PlayerCell[] playerCells) {
+		return Centering.FindCenterCell(playerCells).coordinates;
     }
 }
