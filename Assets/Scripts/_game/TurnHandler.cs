@@ -23,6 +23,8 @@ public class TurnHandler : MonoBehaviour {
 	Enemy[] enemyCells;
 	HexDirection hoveredCellOpensToThisDirection;
 	HexDirection furthestCellOpensToThisDirection;
+	CellBeats cellBeats;
+	Tile[] tiles;
 
 	void Awake () {
 		scriptUsageTimeline = GameObject.Find("Music Player").GetComponent<ScriptUsageTimeline>();
@@ -31,6 +33,7 @@ public class TurnHandler : MonoBehaviour {
 		currentLevel = GameObject.Find("First Level").GetComponent<FirstLevel>();
 		playerCells = new PlayerCell[currentLevel.playerCoordinates.Length];
 		enemyCells = new Enemy[currentLevel.enemyCoordinates.Length];
+		cellBeats = GameObject.Find("Cell Beats").GetComponent<CellBeats>();
 	}
 
 	void Start () {
@@ -51,10 +54,13 @@ public class TurnHandler : MonoBehaviour {
 
 	void InitTiles() {
 		HexCell[] emptyCells = hexGrid.getCellsByNotStatus(HexCellStatus.WALL);
+		tiles = new Tile[emptyCells.Length];
 		for (int i = 0; i < emptyCells.Length; i++) {
 			Tile tile = Instantiate<Tile>(tilePrefab);
 			tile.transform.position = HexCoordinates.ToPosition(emptyCells[i].coordinates, -5);
 			tile.PlayRandomAnim();
+			tile.coordinates = emptyCells[i].coordinates;
+			tiles[i] = tile;
 		}
 	}
 
@@ -233,6 +239,8 @@ public class TurnHandler : MonoBehaviour {
 
 			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2));
+
+			cellBeats.MoveWithCenter(hoveredCell.coordinates, tiles, hexGrid.getCellsByNotStatus(HexCellStatus.WALL));
 		}
 	}
 	private void RedrawPlayer() {
