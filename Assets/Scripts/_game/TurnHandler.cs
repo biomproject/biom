@@ -153,6 +153,8 @@ public class TurnHandler : MonoBehaviour {
 
 			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
+			cellCore.PlayBreathInBoiAnim();
+			cellCore.Rotate(foundTouchedDirection.Item1);
 		}
 
 		if (hoveredPlayerCell && (hoveredPlayerCell.coordinates.ToString() != hexGrid.touchedCell.coordinates.ToString())) {
@@ -172,6 +174,8 @@ public class TurnHandler : MonoBehaviour {
 
 			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
+			cellCore.PlayBreathInBoiAnim();
+			cellCore.Rotate(foundTouchedDirection.Item1);
 		}
 
 		if (!furthestPlayerCell) {
@@ -242,6 +246,8 @@ public class TurnHandler : MonoBehaviour {
 			hoveredCell.setControlsStatuc(GameControlsStatus.NOTHING);
 			furthestCell.setStatus(HexCellStatus.EMPTY);
 			furthestCell.setControlsStatuc(GameControlsStatus.NOTHING);
+
+			cellCore.PlayDefaultAnim();
 
 			RedrawSpawningPlayerCellFromHexCell(hoveredCell);
 

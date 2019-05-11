@@ -8,6 +8,11 @@ public class CellCore: MonoBehaviour {
     Vector3 startPos;
     Vector3 endPos;
     float speed = 100f;
+	Animator anim;
+
+	void Awake() {
+		anim = GetComponent<Animator>();
+	}
 
 	public void MoveCellCore(Vector3 end) {
 		// Keep a note of the time the movement started.
@@ -30,4 +35,20 @@ public class CellCore: MonoBehaviour {
 
 	    transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
     }
+
+	public void PlayBreathInBoiAnim() {
+		anim.Play("breath_in");
+	}
+
+	public void PlayDefaultAnim() {
+		anim.Play("happy_face");
+	}
+
+	public void Rotate(int degrees) {
+		transform.eulerAngles = new Vector3(
+			transform.eulerAngles.x,
+			degrees - 120,
+			transform.eulerAngles.z
+		);
+	}
 }
