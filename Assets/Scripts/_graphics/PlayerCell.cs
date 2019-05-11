@@ -11,6 +11,8 @@ public class PlayerCell : MonoBehaviour {
     private Transform redBloodCells;
     private Transform wall;
     bool movedByTargeting = false;
+    private string archetype;
+    bool hoverAnimIsPlaying = false;
 
     void Awake() {
         foreach (Transform child in transform) {
@@ -56,6 +58,9 @@ public class PlayerCell : MonoBehaviour {
     }
 
     public void PlayCellWallAnim(string wallCase) {
+        if (hoverAnimIsPlaying) {
+            return;
+        }
         if (movedByTargeting) {
             movedByTargeting = false;
             SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
@@ -65,6 +70,7 @@ public class PlayerCell : MonoBehaviour {
         }
 
         Tuple<PlayerCellWallCase, int> archeTypeAndDegree = PlayerCellWall.GetArcheTypeAndDegree(wallCase);
+        archetype = archeTypeAndDegree.Item1.ToString();
         wallAnim.Play(archeTypeAndDegree.Item1.ToString());
         Quaternion target = Quaternion.AngleAxis((float)archeTypeAndDegree.Item2, Vector3.up);
         wall.eulerAngles =  new Vector3(
@@ -84,6 +90,7 @@ public class PlayerCell : MonoBehaviour {
         }
 
         Tuple<PlayerCellWallCase, int> archeTypeAndDegree = PlayerCellWall.GetArcheTypeAndDegree(wallCase);
+        archetype = archeTypeAndDegree.Item1.ToString();
         wallAnim.Play("bubble_spawn_" + archeTypeAndDegree.Item1.ToString());
         Quaternion target = Quaternion.AngleAxis((float)archeTypeAndDegree.Item2, Vector3.up);
         wall.eulerAngles =  new Vector3(
@@ -91,5 +98,18 @@ public class PlayerCell : MonoBehaviour {
             archeTypeAndDegree.Item2,
             transform.eulerAngles.z
         );
+    }
+
+    public void PlayHoveringAnim() {
+        if (hoverAnimIsPlaying) {
+            return;
+        }
+        hoverAnimIsPlaying = true;
+        wallAnim.Play("hover_" + archetype);
+        Invoke("HoverAnimStopped", 0.1f);
+    }
+
+    private void HoverAnimStopped() {
+        hoverAnimIsPlaying = false;
     }
 }

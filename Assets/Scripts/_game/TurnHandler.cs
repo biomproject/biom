@@ -17,6 +17,7 @@ public class TurnHandler : MonoBehaviour {
 	PlayerCell[] playerCells;
 	PlayerCell hoveredPlayerCell;
 	PlayerCell furthestPlayerCell;
+	PlayerCell hoveredPlayerCellForGraphics;
 	public CellCore cellCorePrefab;
 	CellCore cellCore;
 	public Enemy enemyPrefab;
@@ -258,6 +259,21 @@ public class TurnHandler : MonoBehaviour {
 		HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
 		for (int i = 0; i < playerHexCells.Length; i++) {
 			RedrawPlayerCellFromHexCell(playerHexCells[i]);
+		}
+
+		if (hexGrid.hoveredCellForGraphics) {
+			int index = Array.FindIndex(playerCells, cell => {
+				return cell.coordinates.ToString() == hexGrid.hoveredCellForGraphics.coordinates.ToString();
+			});
+
+			if (index < 0) {
+				hoveredPlayerCellForGraphics = null;
+				return;
+			}
+			if (!hoveredPlayerCellForGraphics || playerCells[index].coordinates.ToString() != hoveredPlayerCellForGraphics.coordinates.ToString()) {
+				hoveredPlayerCellForGraphics = playerCells[index];
+				hoveredPlayerCellForGraphics.PlayHoveringAnim();
+			}
 		}
 	}
 

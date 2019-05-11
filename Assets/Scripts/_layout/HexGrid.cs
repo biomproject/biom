@@ -16,6 +16,7 @@ public class HexGrid: MonoBehaviour {
 
 	public HexCell touchedCell;
 	public HexCell furthestCell;
+	public HexCell hoveredCellForGraphics;
 
 	void Awake () {
 		currentLevel = GameObject.Find("First Level").GetComponent<FirstLevel>();
@@ -80,11 +81,7 @@ public class HexGrid: MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetMouseButton(0)) {
-			HandleInput();
-		} else if (touchedCell) {
-			touchedCell = null;
-		}
+		HandleInput();
 
 		hexMesh.Triangulate(cells);
 	}
@@ -93,15 +90,29 @@ public class HexGrid: MonoBehaviour {
 		Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast(inputRay, out hit)) {
-			TouchCell(hit.point);
+			HoverOverCell(hit.point);
+			if (Input.GetMouseButton(0)) {
+				TouchCell(hit.point);
+			}
 		}
-		if (touchedCell && Array.FindIndex(touchedCell.GetNeighbors(), neighbor => neighbor.status == HexCellStatus.PLAYER) == -1) {
+		if (Input.GetMouseButton(0)) {
+			if (touchedCell && Array.FindIndex(touchedCell.GetNeighbors(), neighbor => neighbor.status == HexCellStatus.PLAYER) == -1) {
+				touchedCell = null;
+			}
+			if (touchedCell && touchedCell.status == HexCellStatus.PLAYER) {
+				touchedCell = null;
+			}
+		} else if (touchedCell) {
 			touchedCell = null;
 		}
-		if (touchedCell && touchedCell.status == HexCellStatus.PLAYER) {
-			touchedCell = null;
-		}
+	}
 
+	void HoverOverCell(Vector3 position) {
+		position = transform.InverseTransformPoint(position);
+		HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+		if (!hoveredCellForGraphics || hoveredCellForGraphics.coordinates.ToString() != coordinates.ToString()) {
+			hoveredCellForGraphics = cells[getCellIndexByHexCoordinates(coordinates)];
+		}
 	}
 	
 	void TouchCell (Vector3 position) {
