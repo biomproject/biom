@@ -149,7 +149,10 @@ public class TurnHandler : MonoBehaviour {
 				hoveredPlayerCell.transform.eulerAngles.z
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
-			return;
+			// return;
+
+			// move cellcore
+			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
 		}
 
 		if (hoveredPlayerCell && (hoveredPlayerCell.coordinates.ToString() != hexGrid.touchedCell.coordinates.ToString())) {
@@ -166,6 +169,9 @@ public class TurnHandler : MonoBehaviour {
 				hoveredPlayerCell.transform.eulerAngles.z
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
+
+			// move cellcore
+			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
 		}
 
 		if (!furthestPlayerCell) {
@@ -238,9 +244,6 @@ public class TurnHandler : MonoBehaviour {
 			furthestCell.setControlsStatuc(GameControlsStatus.NOTHING);
 
 			RedrawSpawningPlayerCellFromHexCell(hoveredCell);
-
-			// move cellcore
-			cellCore.MoveCellCore(HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2));
 
 			cellBeats.MoveWithCenter(hoveredCell.coordinates, tiles, hexGrid.getCellsByNotStatus(HexCellStatus.WALL));
 		}
