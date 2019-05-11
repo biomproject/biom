@@ -73,4 +73,23 @@ public class PlayerCell : MonoBehaviour {
             transform.eulerAngles.z
         );
     }
+
+    public void PlaySpawningCellWallAnim(string wallCase) {
+        if (movedByTargeting) {
+            movedByTargeting = false;
+            SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
+            sr.transform.Translate(-1000, -1000, -1000);
+            SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
+            sr2.transform.Translate(-1000, -1000, -1000);
+        }
+
+        Tuple<PlayerCellWallCase, int> archeTypeAndDegree = PlayerCellWall.GetArcheTypeAndDegree(wallCase);
+        wallAnim.Play("bubble_spawn_" + archeTypeAndDegree.Item1.ToString());
+        Quaternion target = Quaternion.AngleAxis((float)archeTypeAndDegree.Item2, Vector3.up);
+        wall.eulerAngles =  new Vector3(
+            transform.eulerAngles.x,
+            archeTypeAndDegree.Item2,
+            transform.eulerAngles.z
+        );
+    }
 }

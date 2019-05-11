@@ -237,6 +237,8 @@ public class TurnHandler : MonoBehaviour {
 			furthestCell.setStatus(HexCellStatus.EMPTY);
 			furthestCell.setControlsStatuc(GameControlsStatus.NOTHING);
 
+			RedrawSpawningPlayerCellFromHexCell(hoveredCell);
+
 			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(Centering.FindCenter(playerCells), -2));
 
@@ -250,6 +252,19 @@ public class TurnHandler : MonoBehaviour {
 		}
 	}
 
+	private void RedrawSpawningPlayerCellFromHexCell(HexCell hexCell) {
+		// TODO: move this finding to a util function
+		PlayerCell playerCellToRedraw = playerCells[Array.FindIndex(playerCells, cell => {
+			return cell.coordinates.ToString() == hexCell.coordinates.ToString();
+		})];
+		if (furthestPlayerCell && (playerCellToRedraw.coordinates.ToString() == furthestPlayerCell.coordinates.ToString())) {
+			return;
+		}
+
+		string playerCellWallCase = FindPlayerCellWallCase(hexCell);
+		playerCellToRedraw.PlaySpawningCellWallAnim(playerCellWallCase);
+	}
+
 	private void RedrawPlayerCellFromHexCell(HexCell hexCell) {
 		// TODO: move this finding to a util function
 		PlayerCell playerCellToRedraw = playerCells[Array.FindIndex(playerCells, cell => {
@@ -258,6 +273,12 @@ public class TurnHandler : MonoBehaviour {
 		if (furthestPlayerCell && (playerCellToRedraw.coordinates.ToString() == furthestPlayerCell.coordinates.ToString())) {
 			return;
 		}
+
+		string playerCellWallCase = FindPlayerCellWallCase(hexCell);
+		playerCellToRedraw.PlayCellWallAnim(playerCellWallCase);
+	}
+
+	private string FindPlayerCellWallCase(HexCell hexCell) {
 		string playerCellWallCase = "";
 
 		// order: [NE, E, SE, SW, W, NW]
@@ -375,7 +396,7 @@ public class TurnHandler : MonoBehaviour {
 			playerCellWallCase += "I";
 		}
 
-		playerCellToRedraw.PlayCellWallAnim(playerCellWallCase);
+		return playerCellWallCase;
 	}
 
 	private void MoveNotEatenEnemies() {

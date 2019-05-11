@@ -31,7 +31,6 @@ public class CellBeats: MonoBehaviour {
 					    frontier.Enqueue(neighbor);
                     }
 
-                    Debug.Log(neighbor.Distance.ToString() + " " + highestDistance);
                     if (neighbor.Distance > highestDistance) {
                         highestDistance = neighbor.Distance;
                     }
@@ -42,7 +41,6 @@ public class CellBeats: MonoBehaviour {
         for (int i = 0; i <= highestDistance; i++) {
             yield return new WaitForSeconds(0.01f);
             HexCell[] currentCells = Array.FindAll(emptyCells, cell => cell.Distance == i);
-            Debug.Log(currentCells.Length);
 
             for (int j = 0; j < currentCells.Length; j++) {
                 Tile currentTile = Array.Find(tiles, tile => tile.coordinates.ToString() == currentCells[j].coordinates.ToString());
