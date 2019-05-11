@@ -28,9 +28,18 @@ public class PlayerCell : MonoBehaviour {
     }
 
     public void PlayTargetingAnim() {
-        wallAnim.Play("bubble_target");
+        wallAnim.Play("bubble_target_2");
         SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
         sr.transform.Translate(1000, 1000, 1000);
+        SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
+        sr2.transform.Translate(1000, 1000, 1000);
+        movedByTargeting = true;
+    }
+
+    public void PlayDisappearingAnim() {
+        wallAnim.Play("bubble_furthest");
+        Animator anim = shine.GetComponent<Animator>();
+        anim.Play("wiggle_light");
         SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
         sr2.transform.Translate(1000, 1000, 1000);
         movedByTargeting = true;
