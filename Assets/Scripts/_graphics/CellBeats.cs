@@ -39,7 +39,9 @@ public class CellBeats: MonoBehaviour {
 		}
 
         for (int i = 0; i <= highestDistance; i++) {
-            yield return new WaitForSeconds(0.01f);
+            if (i != 0) {
+                yield return new WaitForSeconds(0.13f);
+            }
             HexCell[] currentCells = Array.FindAll(emptyCells, cell => cell.Distance == i);
 
             for (int j = 0; j < currentCells.Length; j++) {

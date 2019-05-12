@@ -13,7 +13,7 @@ public class Tile : MonoBehaviour {
     }
 
     public void PlayRandomAnim() {
-        animNo = UnityEngine.Random.Range(1, 5); 
+        animNo = UnityEngine.Random.Range(1, 5);
         anim.Play("tile_0" + animNo.ToString() + "_anim");
     }
 
