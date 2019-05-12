@@ -45,10 +45,31 @@ public class CellCore: MonoBehaviour {
 	}
 
 	public void Rotate(int degrees) {
-		transform.eulerAngles = new Vector3(
-			transform.eulerAngles.x,
-			degrees - 120,
-			transform.eulerAngles.z
-		);
+		Debug.Log(degrees);
+
+		if (degrees == 180 || degrees == 120 || degrees == 60) {
+			transform.eulerAngles = new Vector3(
+				90,
+				degrees - 120,
+				transform.eulerAngles.z
+			);
+			return;
+		}
+		if (degrees == 0) {
+			transform.eulerAngles = new Vector3(
+				270,
+				degrees - 120,
+				transform.eulerAngles.z
+			);
+			return;
+		}
+		if (degrees == 240 || degrees == -60) {
+			transform.eulerAngles = new Vector3(
+				270,
+				degrees - 60,
+				transform.eulerAngles.z
+			);
+			return;
+		}
 	}
 }
