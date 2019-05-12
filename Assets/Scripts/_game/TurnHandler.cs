@@ -110,6 +110,8 @@ public class TurnHandler : MonoBehaviour {
 	}
 
 	void DrawHoverAndFurthest() {
+		AnimateCellCoreBreath();
+
 		// check if there is a touched cell
 		if (!hexGrid.touchedCell) {
 			if (hoveredPlayerCell) {
@@ -154,7 +156,7 @@ public class TurnHandler : MonoBehaviour {
 
 			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
-			cellCore.PlayBreathInBoiAnim();
+			cellCore.PlayBoiAnim();
 			cellCore.Rotate(foundTouchedDirection.Item1);
 		}
 
@@ -175,7 +177,7 @@ public class TurnHandler : MonoBehaviour {
 
 			// move cellcore
 			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
-			cellCore.PlayBreathInBoiAnim();
+			cellCore.PlayBoiAnim();
 			cellCore.Rotate(foundTouchedDirection.Item1);
 		}
 
@@ -196,6 +198,14 @@ public class TurnHandler : MonoBehaviour {
 			furthestCellOpensToThisDirection = foundFurthestDirection.Item2;
 			furthestPlayerCell.RotateWall(foundFurthestDirection.Item1);
 			furthestPlayerCell.PlayDisappearingAnim();
+		}
+	}
+
+	private void AnimateCellCoreBreath() {
+		if (Input.GetMouseButton(0)) {
+			cellCore.PlayBreathInAnim();
+		} else {
+			cellCore.PlayDefaultAnim();
 		}
 	}
 

@@ -9,6 +9,7 @@ public class CellCore: MonoBehaviour {
     Vector3 endPos;
     float speed = 100f;
 	Animator anim;
+	bool breathInPlaying = false;
 
 	void Awake() {
 		anim = GetComponent<Animator>();
@@ -36,11 +37,19 @@ public class CellCore: MonoBehaviour {
 	    transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
     }
 
-	public void PlayBreathInBoiAnim() {
-		anim.Play("breath_in");
+	public void PlayBreathInAnim() {
+		if (!breathInPlaying) {
+			anim.Play("breath_in");
+			breathInPlaying = true;
+		}
+	}
+
+	public void PlayBoiAnim() {
+		anim.Play("boi");
 	}
 
 	public void PlayDefaultAnim() {
+		breathInPlaying = false;
 		anim.Play("happy_face");
 	}
 
