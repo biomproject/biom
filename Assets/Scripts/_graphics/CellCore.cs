@@ -5,6 +5,7 @@ public class CellCore: MonoBehaviour {
 	public HexCoordinates coordinates;
     float journeyLength;
     float startTime;
+    float startBounceTime;
     Vector3 startPos;
     Vector3 endPos;
     float speed = 100f;
@@ -24,7 +25,12 @@ public class CellCore: MonoBehaviour {
 		// Calculate the journey length.
 		journeyLength = Vector3.Distance(startPos, endPos);
 	}
+
+	public void BounceCellCore() {
+		startBounceTime = Time.time;
+	}
     void Update() {
+		// distance
         if (endPos == new Vector3(0, 0, 0)) {
             return;
         }
@@ -35,6 +41,12 @@ public class CellCore: MonoBehaviour {
 	    float fracJourney = distCovered / journeyLength;
 
 	    transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
+
+		// bounce from here
+		// if (fracBounce == 1) {
+		// 	return;
+		// }
+		// transform.localScale = Vector3.Slerp(new Vector3(4f, 2f, 4f), new Vector3(3f, 3f, 3f), fracJourney);
     }
 
 	public void PlayBreathInAnim() {
@@ -54,8 +66,6 @@ public class CellCore: MonoBehaviour {
 	}
 
 	public void Rotate(int degrees) {
-		Debug.Log(degrees);
-
 		if (degrees == 180 || degrees == 120 || degrees == 60) {
 			transform.eulerAngles = new Vector3(
 				90,

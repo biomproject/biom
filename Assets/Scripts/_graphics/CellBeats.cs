@@ -9,7 +9,6 @@ public class CellBeats: MonoBehaviour {
         StartCoroutine(MoveWithCenterCo(coordinates, tiles, emptyCells));
     }
     public IEnumerator MoveWithCenterCo(HexCoordinates coordinates, Tile[] tiles, HexCell[] emptyCells) {
-        // does this fuck up the Distance calcs? Yes it does but why
         for (int i = 0; i < emptyCells.Length; i++) {
 			emptyCells[i].Distance = int.MaxValue;
 		}

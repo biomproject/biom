@@ -102,8 +102,6 @@ public class HexGrid: MonoBehaviour {
 			if (touchedCell && touchedCell.status == HexCellStatus.PLAYER) {
 				touchedCell = null;
 			}
-		} else if (touchedCell) {
-			touchedCell = null;
 		}
 	}
 

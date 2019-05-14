@@ -133,7 +133,7 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		// draw hover and furthest
-		if (hexGrid.touchedCell && Input.GetMouseButton(0) && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
+		if (hexGrid.touchedCell && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
 			hexGrid.touchedCell.setControlsStatuc(GameControlsStatus.HOVERED);
 			hexGrid.furthestCell = Distance.getFurthestPathCell(hexGrid.touchedCell, hexGrid.getCellsByStatus(HexCellStatus.PLAYER));
 			hexGrid.furthestCell.setControlsStatuc(GameControlsStatus.FURTHEST);
@@ -204,6 +204,8 @@ public class TurnHandler : MonoBehaviour {
 	private void AnimateCellCoreBreath() {
 		if (Input.GetMouseButton(0)) {
 			cellCore.PlayBreathInAnim();
+		} else if (hexGrid.touchedCell) {
+			cellCore.PlayBoiAnim();
 		} else {
 			cellCore.PlayDefaultAnim();
 		}
@@ -213,6 +215,10 @@ public class TurnHandler : MonoBehaviour {
 		MovePlayer();
 		RedrawPlayer();
 		MoveNotEatenEnemies();
+
+		hexGrid.touchedCell = null;
+		hexGrid.furthestCell = null;
+		// TODO cellCore.BounceCellCore();
 	}
 
 	private void MovePlayer() {
@@ -285,6 +291,9 @@ public class TurnHandler : MonoBehaviour {
 				hoveredPlayerCellForGraphics.PlayHoveringAnim();
 			}
 		}
+
+		// TODO needed?
+		hexGrid.touchedCell = null;
 	}
 
 	private void RedrawSpawningPlayerCellFromHexCell(HexCell hexCell) {
