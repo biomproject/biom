@@ -28,6 +28,8 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
+	public bool movementStartedFromThis = false;
+
 	[SerializeField]
 	HexCell[] neighbors;
 

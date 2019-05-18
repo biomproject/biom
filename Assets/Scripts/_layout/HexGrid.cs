@@ -117,7 +117,21 @@ public class HexGrid: MonoBehaviour {
 		position = transform.InverseTransformPoint(position);
 		HexCoordinates coordinates = HexCoordinates.FromPosition(position);
 
-		touchedCell = cells[getCellIndexByHexCoordinates(coordinates)];
+		// only touch neighbor cells
+		HexCell[] playerHexCells = getCellsByStatus(HexCellStatus.PLAYER);
+		for (int i = 0; i < playerHexCells.Length; i++) {
+			if (Array.IndexOf(playerHexCells[i].GetNeighbors(), cells[getCellIndexByHexCoordinates(coordinates)]) > -1) {
+				touchedCell = cells[getCellIndexByHexCoordinates(coordinates)];
+			}
+		}
+
+		// only move if there was a dragging motion
+		if (touchedCell.status == HexCellStatus.PLAYER) {
+			for (int i = 0; i < cells.Length; i++) {
+				cells[i].movementStartedFromThis = false;
+			}
+			touchedCell.movementStartedFromThis = true;
+		}
 	}
 
 	int getCellIndexByHexCoordinates(HexCoordinates coordinates) {

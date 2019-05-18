@@ -93,7 +93,6 @@ public class TurnHandler : MonoBehaviour {
 		// undraw GameControlsStatus things
 		for (int i = 0; i < hexGrid.cells.Length; i++) {
 			hexGrid.cells[i].setControlsStatuc(GameControlsStatus.NOTHING);
-			hexGrid.cells[i].color = StatusColors.GetColor(hexGrid.cells[i].status);
 		}
 	}
 
@@ -117,20 +116,27 @@ public class TurnHandler : MonoBehaviour {
 			if (hoveredPlayerCell) {
 				Destroy(hoveredPlayerCell.transform.gameObject);
 			}
+			hexGrid.furthestCell = null;
+			return;
+		}
+
+		// only move if there was a dragging motion
+		// HexCell movementStartedHere = Array.Find(hexGrid.getCellsByStatus(HexCellStatus.PLAYER), cell => cell.movementStartedFromThis);
+		if (Array.FindIndex(hexGrid.touchedCell.GetNeighbors(), cell => cell.movementStartedFromThis) == -1) {
 			return;
 		}
 
 		// check if touchedCell is a legal move
-		bool isLegal = false;
-		HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
-		for (int i = 0; i < playerHexCells.Length; i++) {
-			if (Array.IndexOf(playerHexCells[i].GetNeighbors(), hexGrid.touchedCell) > -1) {
-				isLegal = true;
-			}
-		}
-		if(!isLegal) {
-			return;
-		}
+		// bool isLegal = false;
+		// HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
+		// for (int i = 0; i < playerHexCells.Length; i++) {
+		// 	if (Array.IndexOf(playerHexCells[i].GetNeighbors(), hexGrid.touchedCell) > -1) {
+		// 		isLegal = true;
+		// 	}
+		// }
+		// if(!isLegal) {
+		// 	return;
+		// }
 
 		// draw hover and furthest
 		if (hexGrid.touchedCell && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
@@ -154,8 +160,13 @@ public class TurnHandler : MonoBehaviour {
 			hoveredPlayerCell.PlayTargetingAnim();
 			// return;
 
+			// only move cellcore if its a player cell 
+			HexCell targetCell = hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2);
+			if (targetCell.status != HexCellStatus.PLAYER) {
+				return;
+			}
 			// move cellcore
-			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
+			cellCore.MoveCellCore(HexCoordinates.ToPosition(targetCell.coordinates, -2));
 			cellCore.PlayBoiAnim();
 			cellCore.Rotate(foundTouchedDirection.Item1);
 		}
@@ -175,8 +186,13 @@ public class TurnHandler : MonoBehaviour {
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
 
+			// only move cellcore if its a player cell 
+			HexCell targetCell = hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2);
+			if (targetCell.status != HexCellStatus.PLAYER) {
+				return;
+			}
 			// move cellcore
-			cellCore.MoveCellCore(HexCoordinates.ToPosition(hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2).coordinates, -2));
+			cellCore.MoveCellCore(HexCoordinates.ToPosition(targetCell.coordinates, -2));
 			cellCore.PlayBoiAnim();
 			cellCore.Rotate(foundTouchedDirection.Item1);
 		}
@@ -204,7 +220,7 @@ public class TurnHandler : MonoBehaviour {
 	private void AnimateCellCoreBreath() {
 		if (Input.GetMouseButton(0)) {
 			cellCore.PlayBreathInAnim();
-		} else if (hexGrid.touchedCell) {
+		} else if (hexGrid.touchedCell && Array.FindIndex(hexGrid.touchedCell.GetNeighbors(), cell => cell.movementStartedFromThis) != -1) {
 			cellCore.PlayBoiAnim();
 		} else {
 			cellCore.PlayDefaultAnim();
@@ -269,6 +285,10 @@ public class TurnHandler : MonoBehaviour {
 			RedrawSpawningPlayerCellFromHexCell(hoveredCell);
 
 			cellBeats.MoveWithCenter(hoveredCell.coordinates, tiles, hexGrid.getCellsByNotStatus(HexCellStatus.WALL));
+
+			for (int i = 0; i < hexGrid.cells.Length; i++) {
+				hexGrid.cells[i].movementStartedFromThis = false;
+			}
 		}
 	}
 	private void RedrawPlayer() {
@@ -278,6 +298,10 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (hexGrid.hoveredCellForGraphics) {
+			if (hexGrid.hoveredCellForGraphics.controlsStatus == GameControlsStatus.FURTHEST) {
+				return;
+			}
+
 			int index = Array.FindIndex(playerCells, cell => {
 				return cell.coordinates.ToString() == hexGrid.hoveredCellForGraphics.coordinates.ToString();
 			});
@@ -291,9 +315,6 @@ public class TurnHandler : MonoBehaviour {
 				hoveredPlayerCellForGraphics.PlayHoveringAnim();
 			}
 		}
-
-		// TODO needed?
-		hexGrid.touchedCell = null;
 	}
 
 	private void RedrawSpawningPlayerCellFromHexCell(HexCell hexCell) {

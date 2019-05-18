@@ -61,6 +61,7 @@ public static class PlayerCellWall {
         int rotation = 0;
         HexDirection chosenDirection = HexDirection.NW;
 
+        // old way of neighboring as a fallback
         if (touchedCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER) {
 			rotation = 60 * 0;
             chosenDirection = HexDirection.NW;
@@ -87,6 +88,37 @@ public static class PlayerCellWall {
 		}
 
 		if (touchedCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER) {
+			rotation = 60 * 5;
+            chosenDirection = HexDirection.NE;
+		}
+
+        // new way of neighboring
+        if (touchedCell.GetNeighbor(HexDirection.NW).movementStartedFromThis) {
+			rotation = 60 * 0;
+            chosenDirection = HexDirection.NW;
+		}
+		
+		if (touchedCell.GetNeighbor(HexDirection.W).movementStartedFromThis) {
+			rotation = 60 * 1;
+            chosenDirection = HexDirection.W;
+		}
+
+		if (touchedCell.GetNeighbor(HexDirection.SW).movementStartedFromThis) {
+			rotation = 60 * 2;
+            chosenDirection = HexDirection.SW;
+		}
+
+		if (touchedCell.GetNeighbor(HexDirection.SE).movementStartedFromThis) {
+			rotation = 60 * 3;
+            chosenDirection = HexDirection.SE;
+		}
+
+		if (touchedCell.GetNeighbor(HexDirection.E).movementStartedFromThis) {
+			rotation = 60 * 4;
+            chosenDirection = HexDirection.E;
+		}
+
+		if (touchedCell.GetNeighbor(HexDirection.NE).movementStartedFromThis) {
 			rotation = 60 * 5;
             chosenDirection = HexDirection.NE;
 		}
