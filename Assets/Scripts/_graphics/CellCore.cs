@@ -11,6 +11,7 @@ public class CellCore: MonoBehaviour {
     float speed = 100f;
 	Animator anim;
 	bool breathInPlaying = false;
+	bool boiAnimPlaying = false;
 
 	void Awake() {
 		anim = GetComponent<Animator>();
@@ -53,14 +54,17 @@ public class CellCore: MonoBehaviour {
 		if (!breathInPlaying) {
 			anim.Play("breath_in");
 			breathInPlaying = true;
+			boiAnimPlaying = false;
 		}
 	}
 
 	public void PlayBoiAnim() {
+		boiAnimPlaying = true;
 		anim.Play("boi");
 	}
 
 	public void PlayDefaultAnim() {
+		boiAnimPlaying = false;
 		breathInPlaying = false;
 		anim.Play("happy_face");
 	}
@@ -90,5 +94,13 @@ public class CellCore: MonoBehaviour {
 			);
 			return;
 		}
+	}
+
+	public void ResetRotation() {
+		if (boiAnimPlaying || breathInPlaying) {
+			return;
+		}
+
+		Rotate(120);
 	}
 }

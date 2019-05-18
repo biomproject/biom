@@ -218,6 +218,8 @@ public class TurnHandler : MonoBehaviour {
 	}
 
 	private void AnimateCellCoreBreath() {
+		cellCore.ResetRotation();
+
 		if (Input.GetMouseButton(0)) {
 			cellCore.PlayBreathInAnim();
 		} else if (hexGrid.touchedCell && Array.FindIndex(hexGrid.touchedCell.GetNeighbors(), cell => cell.movementStartedFromThis) != -1) {
