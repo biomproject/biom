@@ -99,17 +99,17 @@ public class PlayerCell : MonoBehaviour {
             res = "NW_W";
         } else if (playerCellWallCase == "OIIIIO") {
             res = "NE_NW";
-        } else if (playerCellWallCase == "OOOIII") {
-            res = "E_NE_NW";
-        } else if (playerCellWallCase == "IOOOII") {
-            res = "SE_E_NE";
-        } else if (playerCellWallCase == "IIOOOI") {
-            res = "SW_SE_E";
-        } else if (playerCellWallCase == "IIIOOO") {
-            res = "W_SW_SE";
-        } else if (playerCellWallCase == "OIIIOO") {
-            res = "NW_W_SW";
         } else if (playerCellWallCase == "OOIIIO") {
+            res = "E_NE_NW";
+        } else if (playerCellWallCase == "OOOIII") {
+            res = "SE_E_NE";
+        } else if (playerCellWallCase == "IOOOII") {
+            res = "SW_SE_E";
+        } else if (playerCellWallCase == "IIOOOI") {
+            res = "W_SW_SE";
+        } else if (playerCellWallCase == "IIIOOO") {
+            res = "NW_W_SW";
+        } else if (playerCellWallCase == "OIIIOO") {
             res = "NE_NW_W";
         } 
 
