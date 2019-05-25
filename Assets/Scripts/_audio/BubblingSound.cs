@@ -12,7 +12,6 @@ public class BubblingSound : MonoBehaviour {
     void Awake() {
         PlayBubblingSound = FMODUnity.RuntimeManager.CreateInstance(this.selectSound);
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(PlayBubblingSound, GetComponent<Transform>(), GetComponent<Rigidbody>());
-        PlayBubblingSound.start();
     }
 
     public void PlaySound() {
@@ -21,5 +20,10 @@ public class BubblingSound : MonoBehaviour {
 
     public void StopSound() {
         PlayBubblingSound.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        PlayBubblingSound.release();
+    }
+
+    void OnDestroy() {
+        StopSound();
     }
 }

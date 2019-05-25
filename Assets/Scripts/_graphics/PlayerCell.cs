@@ -43,6 +43,7 @@ public class PlayerCell : MonoBehaviour {
         SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
         sr2.transform.Translate(1000, 1000, 1000);
         movedByTargeting = true;
+
         bubblingSound.PlaySound();
     }
 
@@ -53,6 +54,8 @@ public class PlayerCell : MonoBehaviour {
         SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
         sr2.transform.Translate(1000, 1000, 1000);
         movedByTargeting = true;
+
+        // bubblingSound.StopSound();
     }
     public void RotateWall(int degree) {
         wall.eulerAngles =  new Vector3(
@@ -86,6 +89,8 @@ public class PlayerCell : MonoBehaviour {
             archeTypeAndDegree.Item2,
             transform.eulerAngles.z
         );
+
+        // bubblingSound.StopSound();
     }
 
     public void PlaySpawningCellWallAnim(string wallCase, int rotateDegress) {
@@ -106,12 +111,16 @@ public class PlayerCell : MonoBehaviour {
             rotateDegress,
             transform.eulerAngles.z
         );
+
+        // bubblingSound.StopSound();
     }
 
     public void CloseSpawningCellAnim() {
         spawningAnimIsPlaying = false;
         SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
         sr.transform.Translate(1000, 1000, 1000);
+
+        // bubblingSound.StopSound();
     }
 
     public void PlayHoveringAnim() {
