@@ -14,7 +14,6 @@ public static class PlayerCellWall {
 
         for (int i = 0; i < 6; i++) {
             bool isContained = Enum.GetNames(typeof(PlayerCellWallCase)).Contains(realCase);
-            // Debug.Log(realCase + " " + i);
 
             if (isContained) {
                 Enum.TryParse(realCase, out PlayerCellWallCase wallCase);

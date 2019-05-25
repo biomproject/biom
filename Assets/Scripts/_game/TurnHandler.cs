@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class TurnHandler : MonoBehaviour {
 	PlayerCell[] playerCells;
 	PlayerCell hoveredPlayerCell;
 	PlayerCell furthestPlayerCell;
+	PlayerCell spawningPlayerCell;
 	PlayerCell hoveredPlayerCellForGraphics;
 	public CellCore cellCorePrefab;
 	CellCore cellCore;
@@ -24,6 +26,7 @@ public class TurnHandler : MonoBehaviour {
 	Enemy[] enemyCells;
 	HexDirection hoveredCellOpensToThisDirection;
 	HexDirection furthestCellOpensToThisDirection;
+	HexDirection spawningCellOpensToThisDirection;
 	CellBeats cellBeats;
 	Tile[] tiles;
 
@@ -126,18 +129,6 @@ public class TurnHandler : MonoBehaviour {
 			return;
 		}
 
-		// check if touchedCell is a legal move
-		// bool isLegal = false;
-		// HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
-		// for (int i = 0; i < playerHexCells.Length; i++) {
-		// 	if (Array.IndexOf(playerHexCells[i].GetNeighbors(), hexGrid.touchedCell) > -1) {
-		// 		isLegal = true;
-		// 	}
-		// }
-		// if(!isLegal) {
-		// 	return;
-		// }
-
 		// draw hover and furthest
 		if (hexGrid.touchedCell && hexGrid.touchedCell.status == HexCellStatus.EMPTY) {
 			hexGrid.touchedCell.setControlsStatuc(GameControlsStatus.HOVERED);
@@ -158,7 +149,6 @@ public class TurnHandler : MonoBehaviour {
 				hoveredPlayerCell.transform.eulerAngles.z
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
-			// return;
 
 			// only move cellcore if its a player cell 
 			HexCell targetCell = hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2);
@@ -329,7 +319,23 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		string playerCellWallCase = FindPlayerCellWallCase(hexCell);
-		playerCellToRedraw.PlaySpawningCellWallAnim(playerCellWallCase);
+		Tuple<int, HexDirection> foundTouchedDirection = PlayerCellWall.FindTouchedRotation(hexGrid.touchedCell);
+		spawningCellOpensToThisDirection = foundTouchedDirection.Item2;
+		spawningPlayerCell = playerCellToRedraw;
+
+		playerCellToRedraw.PlaySpawningCellWallAnim(playerCellWallCase, foundTouchedDirection.Item1);
+
+		// Until the anim is playing, the spawning cell is not considered a player cell
+		hexCell.status = HexCellStatus.SPAWNING;
+
+		StartCoroutine(SetHexCellStatusToPlayer(hexCell, playerCellToRedraw, 0.2f));
+	}
+
+	private IEnumerator SetHexCellStatusToPlayer(HexCell hexCell, PlayerCell playerCell, float delay) {
+		yield return new WaitForSeconds(delay);
+		hexCell.status = HexCellStatus.PLAYER;
+		spawningPlayerCell = null;
+		playerCell.CloseSpawningCellAnim();
 	}
 
 	private void RedrawPlayerCellFromHexCell(HexCell hexCell) {
@@ -356,6 +362,8 @@ public class TurnHandler : MonoBehaviour {
 
 		HexCell[] playerHexCellNeighbors = hexCell.GetNeighbors();
 		if (
+			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.NE).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.NE))
+			||
 			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.NE).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.NE))
 			&&
 			((hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER)
@@ -374,6 +382,8 @@ public class TurnHandler : MonoBehaviour {
 		}
 		
 		if (
+			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.E).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.E))
+			||
 			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.E).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.E))
 			&&
 			((hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER)
@@ -392,6 +402,8 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
+			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.SE).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.SE))
+			||
 			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.SE).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.SE))
 			&&
 			((hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER)
@@ -410,6 +422,8 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
+			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.SW).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.SW))
+			||
 			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.SW).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.SW))
 			&&
 			((hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER)
@@ -428,6 +442,8 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
+			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.W).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.W))
+			||
 			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.W).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.W))
 			&&
 			((hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER)
@@ -446,6 +462,8 @@ public class TurnHandler : MonoBehaviour {
 		}
 
 		if (
+			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.NW).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.NW))
+			||
 			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.NW).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.NW))
 			&&
 			((hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER)

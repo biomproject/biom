@@ -2,5 +2,6 @@ public enum HexCellStatus {
 	EMPTY,
     PLAYER,
     ENEMY,
-    WALL
+    WALL,
+    SPAWNING
 }

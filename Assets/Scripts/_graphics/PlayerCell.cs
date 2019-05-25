@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class PlayerCell : MonoBehaviour {
     public HexCoordinates coordinates;
@@ -13,6 +15,8 @@ public class PlayerCell : MonoBehaviour {
     bool movedByTargeting = false;
     private string archetype;
     bool hoverAnimIsPlaying = false;
+    bool spawningAnimIsPlaying = false;
+    BubblingSound bubblingSound;
 
     void Awake() {
         foreach (Transform child in transform) {
@@ -26,6 +30,9 @@ public class PlayerCell : MonoBehaviour {
                 wall = child;
                 wallAnim = child.GetComponent<Animator>();
             }
+            if (child.name == "Bubbling Sound") {
+                bubblingSound = child.GetComponent<BubblingSound>();
+            }
         }
     }
 
@@ -36,6 +43,7 @@ public class PlayerCell : MonoBehaviour {
         SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
         sr2.transform.Translate(1000, 1000, 1000);
         movedByTargeting = true;
+        bubblingSound.PlaySound();
     }
 
     public void PlayDisappearingAnim() {
@@ -58,7 +66,7 @@ public class PlayerCell : MonoBehaviour {
     }
 
     public void PlayCellWallAnim(string wallCase) {
-        if (hoverAnimIsPlaying) {
+        if (hoverAnimIsPlaying || spawningAnimIsPlaying) {
             return;
         }
         if (movedByTargeting) {
@@ -80,28 +88,34 @@ public class PlayerCell : MonoBehaviour {
         );
     }
 
-    public void PlaySpawningCellWallAnim(string wallCase) {
+    public void PlaySpawningCellWallAnim(string wallCase, int rotateDegress) {
+        spawningAnimIsPlaying = true;
+        SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
+        sr.transform.Translate(-1000, -1000, -1000);
         if (movedByTargeting) {
             movedByTargeting = false;
-            SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
-            sr.transform.Translate(-1000, -1000, -1000);
             SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
             sr2.transform.Translate(-1000, -1000, -1000);
         }
-
         Tuple<PlayerCellWallCase, int> archeTypeAndDegree = PlayerCellWall.GetArcheTypeAndDegree(wallCase);
         archetype = archeTypeAndDegree.Item1.ToString();
         wallAnim.Play("bubble_spawn_" + archeTypeAndDegree.Item1.ToString());
         Quaternion target = Quaternion.AngleAxis((float)archeTypeAndDegree.Item2, Vector3.up);
         wall.eulerAngles =  new Vector3(
             transform.eulerAngles.x,
-            archeTypeAndDegree.Item2,
+            rotateDegress,
             transform.eulerAngles.z
         );
     }
 
+    public void CloseSpawningCellAnim() {
+        spawningAnimIsPlaying = false;
+        SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
+        sr.transform.Translate(1000, 1000, 1000);
+    }
+
     public void PlayHoveringAnim() {
-        if (hoverAnimIsPlaying) {
+        if (hoverAnimIsPlaying || spawningAnimIsPlaying) {
             return;
         }
         hoverAnimIsPlaying = true;
