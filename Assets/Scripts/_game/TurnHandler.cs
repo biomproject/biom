@@ -226,7 +226,6 @@ public class TurnHandler : MonoBehaviour {
 
 		hexGrid.touchedCell = null;
 		hexGrid.furthestCell = null;
-		// TODO cellCore.BounceCellCore();
 	}
 
 	private void MovePlayer() {

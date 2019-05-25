@@ -5,13 +5,13 @@ public class CellCore: MonoBehaviour {
 	public HexCoordinates coordinates;
     float journeyLength;
     float startTime;
-    float startBounceTime;
     Vector3 startPos;
     Vector3 endPos;
     float speed = 100f;
 	Animator anim;
 	bool breathInPlaying = false;
 	bool boiAnimPlaying = false;
+	bool moveBoiAnimPlaying = false;
 
 	void Awake() {
 		anim = GetComponent<Animator>();
@@ -25,11 +25,11 @@ public class CellCore: MonoBehaviour {
 
 		// Calculate the journey length.
 		journeyLength = Vector3.Distance(startPos, endPos);
+		if (journeyLength > 5f) {
+			PlayMoveBoiAnim();
+		}
 	}
 
-	public void BounceCellCore() {
-		startBounceTime = Time.time;
-	}
     void Update() {
 		// distance
         if (endPos == new Vector3(0, 0, 0)) {
@@ -42,12 +42,6 @@ public class CellCore: MonoBehaviour {
 	    float fracJourney = distCovered / journeyLength;
 
 	    transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
-
-		// bounce from here
-		// if (fracBounce == 1) {
-		// 	return;
-		// }
-		// transform.localScale = Vector3.Slerp(new Vector3(4f, 2f, 4f), new Vector3(3f, 3f, 3f), fracJourney);
     }
 
 	public void PlayBreathInAnim() {
@@ -57,8 +51,21 @@ public class CellCore: MonoBehaviour {
 			boiAnimPlaying = false;
 		}
 	}
+	public void PlayMoveBoiAnim() {
+		boiAnimPlaying = false;
+		moveBoiAnimPlaying = true;
+		anim.Play("move_boi");
+		Invoke("EndMoveBoiAnim", 0.5f);
+	}
+
+	private void EndMoveBoiAnim() {
+		moveBoiAnimPlaying = false;
+	}
 
 	public void PlayBoiAnim() {
+		if (moveBoiAnimPlaying) {
+			return;
+		}
 		boiAnimPlaying = true;
 		anim.Play("boi");
 	}
@@ -68,9 +75,8 @@ public class CellCore: MonoBehaviour {
 		breathInPlaying = false;
 		anim.Play("happy_face");
 	}
-
 	public void Rotate(int degrees) {
-		if (degrees == 180 || degrees == 120 || degrees == 60) {
+		if (degrees == 120 || degrees == 60) {
 			transform.eulerAngles = new Vector3(
 				90,
 				degrees - 120,
@@ -78,17 +84,17 @@ public class CellCore: MonoBehaviour {
 			);
 			return;
 		}
-		if (degrees == 0) {
+		if (degrees == 180 || degrees == 240 || degrees == -60) {
 			transform.eulerAngles = new Vector3(
 				270,
-				degrees - 120,
+				degrees - 60,
 				transform.eulerAngles.z
 			);
 			return;
 		}
-		if (degrees == 240 || degrees == -60) {
+		if (degrees == 0) {
 			transform.eulerAngles = new Vector3(
-				270,
+				90,
 				degrees - 60,
 				transform.eulerAngles.z
 			);
@@ -97,7 +103,7 @@ public class CellCore: MonoBehaviour {
 	}
 
 	public void ResetRotation() {
-		if (boiAnimPlaying || breathInPlaying) {
+		if (boiAnimPlaying || breathInPlaying || moveBoiAnimPlaying) {
 			return;
 		}
 
