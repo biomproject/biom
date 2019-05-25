@@ -364,15 +364,10 @@ public class TurnHandler : MonoBehaviour {
 		for (int i = 0; i < hexDirectionInOrder.Length; i++) {
 			HexDirection currentHexDirection = hexDirectionInOrder[i];
 			if (
-				IsNeighborSpawningAndOpenedInThisDirection(currentHexDirection, hexCell)
-				||
-				IsNeighborFurthestAndOpenedInThisDirection(currentHexDirection, hexCell)
-				&&
-				(
-					(hexCell.GetNeighbor(currentHexDirection).status == HexCellStatus.PLAYER)
-					||
-					IsNeighborHoveredAndOpenedInThisDirection(currentHexDirection, hexCell)
-				)
+				IsNeighborPlayer(currentHexDirection, hexCell) ||
+				IsNeighborSpawningAndOpenedInThisDirection(currentHexDirection, hexCell) ||
+				// IsNeighborFurthestAndOpenedInThisDirection(currentHexDirection, hexCell) ||
+				IsNeighborHoveredAndOpenedInThisDirection(currentHexDirection, hexCell)
 			) {
 				playerCellWallCase += "O";
 			} else {
@@ -391,18 +386,20 @@ public class TurnHandler : MonoBehaviour {
 	}
 
 	private bool IsNeighborFurthestAndOpenedInThisDirection(HexDirection currentHexDirection, HexCell hexCell) {
-		return !(
-			furthestPlayerCell &&
+		return furthestPlayerCell &&
+			furthestCellOpensToThisDirection is Enum &&
 			(hexCell.GetNeighbor(currentHexDirection).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) &&
-			(furthestCellOpensToThisDirection is Enum &&
-			HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != currentHexDirection)
-		);
+			(HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) == currentHexDirection);
 	}
 
 	private bool IsNeighborHoveredAndOpenedInThisDirection(HexDirection currentHexDirection, HexCell hexCell) {
 		return hoveredCellOpensToThisDirection is Enum &&
 			(hexCell.GetNeighbor(currentHexDirection).controlsStatus == GameControlsStatus.HOVERED) &&
 			(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == currentHexDirection);
+	}
+
+	private bool IsNeighborPlayer(HexDirection currentHexDirection, HexCell hexCell) {
+		return hexCell.GetNeighbor(currentHexDirection).status == HexCellStatus.PLAYER;
 	}
 
 	private void MoveNotEatenEnemies() {
