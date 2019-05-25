@@ -193,7 +193,8 @@ public class TurnHandler : MonoBehaviour {
 			furthestPlayerCell.coordinates = hexGrid.furthestCell.coordinates;
 			Tuple<int, HexDirection> foundFurthestDirection = PlayerCellWall.FindFurthestRotation(hexGrid.furthestCell);
 			furthestCellOpensToThisDirection = foundFurthestDirection.Item2;
-			furthestPlayerCell.PlayDisappearingAnim(foundFurthestDirection.Item1);
+			string playerCellWallCase = FindPlayerCellWallCase(hexGrid.furthestCell);
+			furthestPlayerCell.PlayDisappearingAnim(foundFurthestDirection.Item1, playerCellWallCase);
 		}
 		if (furthestPlayerCell && (furthestPlayerCell.coordinates.ToString() != hexGrid.furthestCell.coordinates.ToString())) {
 			furthestPlayerCell = Array.Find(playerCells, playerCell => playerCell.coordinates.ToString() == hexGrid.furthestCell.coordinates.ToString());
@@ -201,7 +202,8 @@ public class TurnHandler : MonoBehaviour {
 			furthestPlayerCell.coordinates = hexGrid.furthestCell.coordinates;
 			Tuple<int, HexDirection> foundFurthestDirection = PlayerCellWall.FindFurthestRotation(hexGrid.furthestCell);
 			furthestCellOpensToThisDirection = foundFurthestDirection.Item2;
-			furthestPlayerCell.PlayDisappearingAnim(foundFurthestDirection.Item1);
+			string playerCellWallCase = FindPlayerCellWallCase(hexGrid.furthestCell);
+			furthestPlayerCell.PlayDisappearingAnim(foundFurthestDirection.Item1, playerCellWallCase);
 		}
 	}
 
