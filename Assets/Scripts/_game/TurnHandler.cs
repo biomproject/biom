@@ -351,6 +351,7 @@ public class TurnHandler : MonoBehaviour {
 
 	private string FindPlayerCellWallCase(HexCell hexCell) {
 		string playerCellWallCase = "";
+		HexCell[] playerHexCellNeighbors = hexCell.GetNeighbors();
 
 		// order: [NE, E, SE, SW, W, NW]
 		//		  E
@@ -358,128 +359,50 @@ public class TurnHandler : MonoBehaviour {
 		//	  SW	NW
 		//		  W
 
-		HexCell[] playerHexCellNeighbors = hexCell.GetNeighbors();
-		if (
-			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.NE).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.NE))
-			||
-			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.NE).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.NE))
-			&&
-			((hexCell.GetNeighbor(HexDirection.NE).status == HexCellStatus.PLAYER)
-			||
-			(
-				(hexCell.GetNeighbor(HexDirection.NE).controlsStatus == GameControlsStatus.HOVERED)
-				&&
-				hoveredCellOpensToThisDirection is Enum
-				&&
-				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.NE)
-			))
-		) {
-			playerCellWallCase += "O";
-		} else {
-			playerCellWallCase += "I";
-		}
-		
-		if (
-			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.E).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.E))
-			||
-			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.E).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.E))
-			&&
-			((hexCell.GetNeighbor(HexDirection.E).status == HexCellStatus.PLAYER)
-			||
-			(
-				(hexCell.GetNeighbor(HexDirection.E).controlsStatus == GameControlsStatus.HOVERED)
-				&&
-				hoveredCellOpensToThisDirection is Enum
-				&&
-				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.E)
-			))
-		) {
-			playerCellWallCase += "O";
-		} else {
-			playerCellWallCase += "I";
-		}
+		HexDirection[] hexDirectionInOrder = { HexDirection.NE, HexDirection.E, HexDirection.SE, HexDirection.SW, HexDirection.W, HexDirection.NW };
 
-		if (
-			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.SE).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.SE))
-			||
-			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.SE).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.SE))
-			&&
-			((hexCell.GetNeighbor(HexDirection.SE).status == HexCellStatus.PLAYER)
-			||
-			(
-				(hexCell.GetNeighbor(HexDirection.SE).controlsStatus == GameControlsStatus.HOVERED)
+		for (int i = 0; i < hexDirectionInOrder.Length; i++) {
+			HexDirection currentHexDirection = hexDirectionInOrder[i];
+			if (
+				IsNeighborSpawningAndOpenedInThisDirection(currentHexDirection, hexCell)
+				||
+				IsNeighborFurthestAndOpenedInThisDirection(currentHexDirection, hexCell)
 				&&
-				hoveredCellOpensToThisDirection is Enum
-				&&
-				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.SE)
-			))
-		) {
-			playerCellWallCase += "O";
-		} else {
-			playerCellWallCase += "I";
-		}
-
-		if (
-			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.SW).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.SW))
-			||
-			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.SW).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.SW))
-			&&
-			((hexCell.GetNeighbor(HexDirection.SW).status == HexCellStatus.PLAYER)
-			||
-			(
-				(hexCell.GetNeighbor(HexDirection.SW).controlsStatus == GameControlsStatus.HOVERED)
-				&&
-				hoveredCellOpensToThisDirection is Enum
-				&&
-				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.SW)
-			))
-		) {
-			playerCellWallCase += "O";
-		} else {
-			playerCellWallCase += "I";
-		}
-
-		if (
-			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.W).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.W))
-			||
-			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.W).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.W))
-			&&
-			((hexCell.GetNeighbor(HexDirection.W).status == HexCellStatus.PLAYER)
-			||
-			(
-				(hexCell.GetNeighbor(HexDirection.W).controlsStatus == GameControlsStatus.HOVERED)
-				&&
-				hoveredCellOpensToThisDirection is Enum
-				&&
-				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.W)
-			))
-		) {
-			playerCellWallCase += "O";
-		} else {
-			playerCellWallCase += "I";
-		}
-
-		if (
-			(spawningPlayerCell && (hexCell.GetNeighbor(HexDirection.NW).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) && (spawningCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == HexDirection.NW))
-			||
-			!(furthestPlayerCell && (hexCell.GetNeighbor(HexDirection.NW).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) && (furthestCellOpensToThisDirection is Enum && HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != HexDirection.NW))
-			&&
-			((hexCell.GetNeighbor(HexDirection.NW).status == HexCellStatus.PLAYER)
-			||
-			(
-				(hexCell.GetNeighbor(HexDirection.NW).controlsStatus == GameControlsStatus.HOVERED)
-				&&
-				hoveredCellOpensToThisDirection is Enum
-				&&
-				(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == HexDirection.NW)
-			))
-		) {
-			playerCellWallCase += "O";
-		} else {
-			playerCellWallCase += "I";
+				(
+					(hexCell.GetNeighbor(currentHexDirection).status == HexCellStatus.PLAYER)
+					||
+					IsNeighborHoveredAndOpenedInThisDirection(currentHexDirection, hexCell)
+				)
+			) {
+				playerCellWallCase += "O";
+			} else {
+				playerCellWallCase += "I";
+			}
 		}
 
 		return playerCellWallCase;
+	}
+
+	private bool IsNeighborSpawningAndOpenedInThisDirection(HexDirection currentHexDirection, HexCell hexCell) {
+		return spawningPlayerCell &&
+			spawningCellOpensToThisDirection is Enum &&
+			(hexCell.GetNeighbor(currentHexDirection).coordinates.ToString() == spawningPlayerCell.coordinates.ToString()) &&
+			(HexDirectionExtensions.Opposite(spawningCellOpensToThisDirection) == currentHexDirection);
+	}
+
+	private bool IsNeighborFurthestAndOpenedInThisDirection(HexDirection currentHexDirection, HexCell hexCell) {
+		return !(
+			furthestPlayerCell &&
+			(hexCell.GetNeighbor(currentHexDirection).coordinates.ToString() == furthestPlayerCell.coordinates.ToString()) &&
+			(furthestCellOpensToThisDirection is Enum &&
+			HexDirectionExtensions.Opposite(furthestCellOpensToThisDirection) != currentHexDirection)
+		);
+	}
+
+	private bool IsNeighborHoveredAndOpenedInThisDirection(HexDirection currentHexDirection, HexCell hexCell) {
+		return hoveredCellOpensToThisDirection is Enum &&
+			(hexCell.GetNeighbor(currentHexDirection).controlsStatus == GameControlsStatus.HOVERED) &&
+			(HexDirectionExtensions.Opposite(hoveredCellOpensToThisDirection) == currentHexDirection);
 	}
 
 	private void MoveNotEatenEnemies() {
