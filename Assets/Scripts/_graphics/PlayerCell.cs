@@ -47,10 +47,11 @@ public class PlayerCell : MonoBehaviour {
         bubblingSound.PlaySound();
     }
 
-    public void PlayDisappearingAnim() {
-        wallAnim.Play("bubble_furthest");
-        Animator anim = shine.GetComponent<Animator>();
-        anim.Play("wiggle_light");
+    public void PlayDisappearingAnim(int rotateDegress) {
+        RotateWall(0);
+        wallAnim.Play("furthest_opens_" + DegreeToDirection(rotateDegress));
+        SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
+        sr.transform.Translate(1000, 1000, 1000);
         SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
         sr2.transform.Translate(1000, 1000, 1000);
         movedByTargeting = true;
@@ -58,11 +59,32 @@ public class PlayerCell : MonoBehaviour {
         // bubblingSound.StopSound();
     }
     public void RotateWall(int degree) {
-        wall.eulerAngles =  new Vector3(
+        wall.eulerAngles = new Vector3(
             wall.eulerAngles.x,
             degree,
             wall.eulerAngles.z
         );
+    }
+
+    private string DegreeToDirection(int degrees) {
+        if (degrees == 0) {
+            return "W";
+        } else if (degrees == 60) {
+            return "SW";
+        } else if (degrees == 120) {
+            return "SE";
+        } else if (degrees == 180) {
+            return "E";
+        } else if (degrees == 240) {
+            return "NE";
+        } else if (degrees == 300) {
+            return "NW";
+        } else if (degrees == 360) {
+            return "W";
+        } if (degrees == -60) {
+            return "NW";
+        }
+        return "W";
     }
     public void PlayCellWallAnim(PlayerCellWallCase wallCase) {
         PlayCellWallAnim(wallCase.ToString());
@@ -84,7 +106,7 @@ public class PlayerCell : MonoBehaviour {
         archetype = archeTypeAndDegree.Item1.ToString();
         wallAnim.Play(archeTypeAndDegree.Item1.ToString());
         Quaternion target = Quaternion.AngleAxis((float)archeTypeAndDegree.Item2, Vector3.up);
-        wall.eulerAngles =  new Vector3(
+        wall.eulerAngles = new Vector3(
             transform.eulerAngles.x,
             archeTypeAndDegree.Item2,
             transform.eulerAngles.z
