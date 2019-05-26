@@ -9,6 +9,10 @@ public class Cursoring : MonoBehaviour
     public Vector2 hotSpot = Vector2.zero;
 
     void Awake() {
+        // newcursorTexture = Instantiate (cursorTexture);
+	    // newholdCursorTexture = Instantiate (holdCursorTexture);
+	    // TextureScale.Bilinear(newcursorTexture, newcursorTexture.width*2, newcursorTexture.height*2);
+	    // TextureScale.Bilinear(newholdCursorTexture, newholdCursorTexture.width*2, newholdCursorTexture.height*2);
         SetNormalCursor();
     }
 

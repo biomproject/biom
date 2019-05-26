@@ -883,8 +883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87731fbbe4271459c0e1509e845c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorTexture: {fileID: 2800000, guid: 62e1e8e7af4c9db48946c386230255d5, type: 3}
-  holdCursorTexture: {fileID: 2800000, guid: 0a055e0f489df294ba37b76116ea92f9, type: 3}
+  cursorTexture: {fileID: 2800000, guid: e7d0b2039763502468723596d10a3029, type: 3}
+  holdCursorTexture: {fileID: 2800000, guid: e4633a1d3c2fb3345a54c47e66958a0b, type: 3}
   cursorMode: 0
   hotSpot: {x: 0, y: 0}
 --- !u!4 &2071424704
