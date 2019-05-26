@@ -29,6 +29,7 @@ public class TurnHandler : MonoBehaviour {
 	HexDirection spawningCellOpensToThisDirection;
 	CellBeats cellBeats;
 	Tile[] tiles;
+	MenuObject menuObject;
 
 	void Awake () {
 		scriptUsageTimeline = GameObject.Find("Music Player").GetComponent<ScriptUsageTimeline>();
@@ -38,6 +39,7 @@ public class TurnHandler : MonoBehaviour {
 		playerCells = new PlayerCell[currentLevel.playerCoordinates.Length];
 		enemyCells = new Enemy[currentLevel.enemyCoordinates.Length];
 		cellBeats = GameObject.Find("Cell Beats").GetComponent<CellBeats>();
+		menuObject = GameObject.Find("Menu").GetComponent<MenuObject>();
 	}
 
 	void Start () {

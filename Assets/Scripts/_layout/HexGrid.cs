@@ -17,8 +17,10 @@ public class HexGrid: MonoBehaviour {
 	public HexCell touchedCell;
 	public HexCell furthestCell;
 	public HexCell hoveredCellForGraphics;
+	MenuObject menuObject;
 
 	void Awake () {
+		menuObject = GameObject.Find("Menu").GetComponent<MenuObject>();
 		currentLevel = GameObject.Find("First Level").GetComponent<FirstLevel>();
 		hexMesh = GetComponentInChildren<HexMesh>();
 		cells = new HexCell[height * width];
@@ -87,6 +89,9 @@ public class HexGrid: MonoBehaviour {
 	}
 
 	void HandleInput () {
+		if (menuObject.isUp) {
+			return;
+		}
 		Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast(inputRay, out hit)) {
