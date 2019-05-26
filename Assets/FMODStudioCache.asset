@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: event:/slider2
   guid: 50a5a3f121283d48ad1e90f9b5c40dc3
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -23,6 +23,25 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 300
   Length: 625
+--- !u!114 &-7560018073300403964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: C:\BiomGame\FMOD\Build\Desktop\Master Bank.bank
+  lastModified: 636944716784609267
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 2285312
+  Exists: 1
 --- !u!114 &-6771414382079088856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38,7 +57,7 @@ MonoBehaviour:
   Path: event:/bubble
   guid: a89e8b9f0f226d4cb9834c08be55c377
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -61,7 +80,7 @@ MonoBehaviour:
   Path: event:/slider3
   guid: 9a74c63dca52a24aa38f14f2b1832c8a
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -83,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114974231300834194}
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   EditorEvents:
   - {fileID: 114106264179830602}
   - {fileID: -6771414382079088856}
@@ -98,7 +117,7 @@ MonoBehaviour:
   - {fileID: 114109052807052792}
   StringsBanks:
   - {fileID: 114974231300834194}
-  stringsBankWriteTime: 636944703575783432
+  stringsBankWriteTime: 636944716784619259
   cacheVersion: 3
 --- !u!114 &114106264179830602
 MonoBehaviour:
@@ -115,7 +134,7 @@ MonoBehaviour:
   Path: event:/beat
   guid: fd0031d15e50034b86fa36b14a1c27ab
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -193,7 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636944703575783432
+  lastModified: 636944716784619259
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -233,7 +252,7 @@ MonoBehaviour:
   Path: event:/slider5
   guid: 770a3f0b6b069644a67419078ef592f3
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -256,7 +275,7 @@ MonoBehaviour:
   Path: event:/slider4
   guid: 8fc82bb529d73740a05ad32d211def9a
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -279,7 +298,7 @@ MonoBehaviour:
   Path: event:/slider1
   guid: bcd0703d7ad1d742af5ac157fa4f6326
   Banks:
-  - {fileID: 1279691167742475114}
+  - {fileID: -7560018073300403964}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
