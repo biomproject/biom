@@ -12,15 +12,25 @@ public class CellCore: MonoBehaviour {
 	bool breathInPlaying = false;
 	bool boiAnimPlaying = false;
 	bool moveBoiAnimPlaying = false;
-	Transform slidingSoundTr;
-	SlidingSound slidingSound;
+	SlidingSound slidingSound1;
+	SlidingSound slidingSound2;
+	SlidingSound slidingSound3;
+	SlidingSound slidingSound4;
+	SlidingSound slidingSound5;
 
 	void Awake() {
 		anim = GetComponent<Animator>();
 		foreach (Transform child in transform) {
-			if (child.name == "Sliding Sound") {
-				slidingSoundTr = child;
-				slidingSound = child.GetComponent<SlidingSound>();
+			if (child.name == "Sliding Sound 1") {
+				slidingSound1 = child.GetComponent<SlidingSound>();
+			} else if (child.name == "Sliding Sound 2") {
+				slidingSound2 = child.GetComponent<SlidingSound>();
+			} else if (child.name == "Sliding Sound 3") {
+				slidingSound3 = child.GetComponent<SlidingSound>();
+			} else if (child.name == "Sliding Sound 4") {
+				slidingSound4 = child.GetComponent<SlidingSound>();
+			} else if (child.name == "Sliding Sound 5") {
+				slidingSound5 = child.GetComponent<SlidingSound>();
 			}
 		}
 	}
@@ -35,7 +45,22 @@ public class CellCore: MonoBehaviour {
 		journeyLength = Vector3.Distance(startPos, endPos);
 		if (journeyLength > 5f) {
 			PlayMoveBoiAnim();
-			slidingSound.PlaySound();
+			PlayRandomSound();
+		}
+	}
+
+	void PlayRandomSound() {
+		int animNo = UnityEngine.Random.Range(1, 5);
+		if (animNo == 1) {
+			slidingSound1.PlaySound();
+		} else if (animNo == 2) {
+			slidingSound2.PlaySound();
+		} else if (animNo == 3) {
+			slidingSound3.PlaySound();
+		} else if (animNo == 4) {
+			slidingSound4.PlaySound();
+		} else if (animNo == 5) {
+			slidingSound5.PlaySound();
 		}
 	}
 
@@ -69,7 +94,6 @@ public class CellCore: MonoBehaviour {
 
 	private void EndMoveBoiAnim() {
 		moveBoiAnimPlaying = false;
-		slidingSound.StopSound();
 	}
 
 	public void PlayBoiAnim() {

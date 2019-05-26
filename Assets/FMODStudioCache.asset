@@ -1,5 +1,28 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8868269202631246075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/slider2
+  guid: 50a5a3f121283d48ad1e90f9b5c40dc3
+  Banks:
+  - {fileID: 114109052807052792}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 625
 --- !u!114 &-6771414382079088856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23,6 +46,29 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 150
   Length: 8000
+--- !u!114 &-4617206273703296646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/slider3
+  guid: 9a74c63dca52a24aa38f14f2b1832c8a
+  Banks:
+  - {fileID: 114109052807052792}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 812
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42,13 +88,17 @@ MonoBehaviour:
   - {fileID: 114106264179830602}
   - {fileID: -6771414382079088856}
   - {fileID: 7552273109888787417}
+  - {fileID: -8868269202631246075}
+  - {fileID: 1488543093773045814}
+  - {fileID: 5011670744927296132}
+  - {fileID: -4617206273703296646}
   MasterBanks:
   - {fileID: 114311873499310790}
   - {fileID: 114839945948297324}
   - {fileID: 114109052807052792}
   StringsBanks:
   - {fileID: 114974231300834194}
-  stringsBankWriteTime: 636944681252106028
+  stringsBankWriteTime: 636944699247099417
   cacheVersion: 3
 --- !u!114 &114106264179830602
 MonoBehaviour:
@@ -86,11 +136,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: C:\Users\mezoi\Desktop\biom2\BiomGame\FMOD\Build\Desktop\Master Bank.bank
-  lastModified: 636944681252036231
+  lastModified: 636944699246969764
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 2206144
+    Value: 2285312
   Exists: 1
 --- !u!114 &114311873499310790
 MonoBehaviour:
@@ -143,12 +193,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636944681252106028
+  lastModified: 636944699247099417
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 812
+    Value: 952
   Exists: 1
+--- !u!114 &1488543093773045814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/slider5
+  guid: 770a3f0b6b069644a67419078ef592f3
+  Banks:
+  - {fileID: 114109052807052792}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 746
+--- !u!114 &5011670744927296132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/slider4
+  guid: 8fc82bb529d73740a05ad32d211def9a
+  Banks:
+  - {fileID: 114109052807052792}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 843
 --- !u!114 &7552273109888787417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,5 +266,5 @@ MonoBehaviour:
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
-  MaxDistance: 150
-  Length: 1416
+  MaxDistance: 300
+  Length: 250
