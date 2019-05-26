@@ -12,9 +12,17 @@ public class CellCore: MonoBehaviour {
 	bool breathInPlaying = false;
 	bool boiAnimPlaying = false;
 	bool moveBoiAnimPlaying = false;
+	Transform slidingSoundTr;
+	SlidingSound slidingSound;
 
 	void Awake() {
 		anim = GetComponent<Animator>();
+		foreach (Transform child in transform) {
+			if (child.name == "Sliding Sound") {
+				slidingSoundTr = child;
+				slidingSound = child.GetComponent<SlidingSound>();
+			}
+		}
 	}
 
 	public void MoveCellCore(Vector3 end) {
@@ -27,6 +35,7 @@ public class CellCore: MonoBehaviour {
 		journeyLength = Vector3.Distance(startPos, endPos);
 		if (journeyLength > 5f) {
 			PlayMoveBoiAnim();
+			slidingSound.PlaySound();
 		}
 	}
 
@@ -60,6 +69,7 @@ public class CellCore: MonoBehaviour {
 
 	private void EndMoveBoiAnim() {
 		moveBoiAnimPlaying = false;
+		slidingSound.StopSound();
 	}
 
 	public void PlayBoiAnim() {
