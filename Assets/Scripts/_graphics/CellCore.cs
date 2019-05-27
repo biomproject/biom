@@ -114,7 +114,7 @@ public class CellCore: MonoBehaviour {
 		if (degrees == 120 || degrees == 60) {
 			transform.eulerAngles = new Vector3(
 				90,
-				degrees - 120,
+				degrees - 90,
 				transform.eulerAngles.z
 			);
 			return;
@@ -122,7 +122,7 @@ public class CellCore: MonoBehaviour {
 		if (degrees == 180 || degrees == 240 || degrees == -60) {
 			transform.eulerAngles = new Vector3(
 				270,
-				degrees - 60,
+				degrees - 90,
 				transform.eulerAngles.z
 			);
 			return;
@@ -130,7 +130,15 @@ public class CellCore: MonoBehaviour {
 		if (degrees == 0) {
 			transform.eulerAngles = new Vector3(
 				90,
-				degrees - 60,
+				degrees - 90,
+				transform.eulerAngles.z
+			);
+			return;
+		}
+		if (degrees == 30) { // !!! !!! !!! !!!
+			transform.eulerAngles = new Vector3(
+				90,
+				degrees - 30,
 				transform.eulerAngles.z
 			);
 			return;
@@ -142,6 +150,6 @@ public class CellCore: MonoBehaviour {
 			return;
 		}
 
-		Rotate(120);
+		Rotate(30);
 	}
 }
