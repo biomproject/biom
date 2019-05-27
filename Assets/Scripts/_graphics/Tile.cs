@@ -10,14 +10,18 @@ public class Tile : MonoBehaviour {
 
     void Awake() {
         anim = GetComponent<Animator>();
+        animNo = UnityEngine.Random.Range(1, 5);
     }
 
     public void PlayRandomAnim() {
-        animNo = UnityEngine.Random.Range(1, 5);
         anim.Play("tile_0" + animNo.ToString() + "_anim");
     }
 
     public void Nudge() {
         anim.Play("tile_0" + animNo.ToString() + "_anim" + "_nudge");
+    }
+
+    public void FastNudge() {
+        anim.Play("tile_0" + animNo.ToString() + "_anim" + "_nudge_fast");
     }
 }

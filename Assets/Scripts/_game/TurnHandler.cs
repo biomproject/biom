@@ -152,6 +152,9 @@ public class TurnHandler : MonoBehaviour {
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
 
+			Tile touchedTile = Array.Find(tiles, tile => tile.coordinates.ToString() == hexGrid.touchedCell.coordinates.ToString());
+			touchedTile.FastNudge();
+
 			// only move cellcore if its a player cell 
 			HexCell targetCell = hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2);
 			if (targetCell.status != HexCellStatus.PLAYER) {
@@ -177,6 +180,9 @@ public class TurnHandler : MonoBehaviour {
 				hoveredPlayerCell.transform.eulerAngles.z
 			);
 			hoveredPlayerCell.PlayTargetingAnim();
+
+			Tile touchedTile = Array.Find(tiles, tile => tile.coordinates.ToString() == hexGrid.touchedCell.coordinates.ToString());
+			touchedTile.FastNudge();
 
 			// only move cellcore if its a player cell 
 			HexCell targetCell = hexGrid.touchedCell.GetNeighbor(foundTouchedDirection.Item2);
