@@ -9,6 +9,7 @@ public class PlayerCell : MonoBehaviour {
     public HexCoordinates coordinates;
     public Enemy isEating;
     private Animator wallAnim;
+    private Animator shineAnim;
     private Transform shine;
     private Transform redBloodCells;
     private Transform wall;
@@ -22,6 +23,7 @@ public class PlayerCell : MonoBehaviour {
         foreach (Transform child in transform) {
             if (child.name == "Shine") {
                 shine = child;
+                shineAnim = child.GetComponent<Animator>();
             }
             if (child.name == "RedBloodCells") {
                 redBloodCells = child;
@@ -180,6 +182,7 @@ public class PlayerCell : MonoBehaviour {
         }
         hoverAnimIsPlaying = true;
         wallAnim.Play("hover_" + archetype);
+        // UNCOMMENT THIS shineAnim.Play("wiggle_light");
         Invoke("HoverAnimStopped", 0.1f);
     }
 
