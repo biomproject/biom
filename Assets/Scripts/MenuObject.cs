@@ -8,6 +8,7 @@ public class MenuObject : MonoBehaviour {
     bool isTitleUp = true;
     bool isTutorialUp = false;
     Animator anim;
+    Animator loaderAnim;
     ScriptUsageTimeline scriptUsageTimeline;
     bool waitingForBeat = false;
     int previousBeat = 0;
@@ -18,7 +19,7 @@ public class MenuObject : MonoBehaviour {
         anim = GetComponent<Animator>();
         scriptUsageTimeline = GameObject.Find("Music Player").GetComponent<ScriptUsageTimeline>();
         loader = GameObject.Find("Loader");
-        loader.transform.Translate(1000, 1000, 1000);
+        loaderAnim = loader.GetComponent<Animator>();
     }
 
     void Update() {
@@ -35,9 +36,9 @@ public class MenuObject : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0)) {
             if (isTitleUp) {
-                loader.transform.Translate(-1000, -1000, -1000);
                 previousBeat = scriptUsageTimeline.timelineInfo.currentMusicBar;
                 waitingForBeat = true;
+                loaderAnim.Play("loading");
                 return;
             }
 
