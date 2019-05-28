@@ -182,7 +182,7 @@ public class PlayerCell : MonoBehaviour {
         }
         hoverAnimIsPlaying = true;
         wallAnim.Play("hover_" + archetype);
-        // UNCOMMENT THIS shineAnim.Play("wiggle_light");
+        shineAnim.Play("wiggle_light");
         Invoke("HoverAnimStopped", 0.1f);
     }
 
