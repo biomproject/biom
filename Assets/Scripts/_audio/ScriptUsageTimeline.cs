@@ -36,11 +36,15 @@ public class ScriptUsageTimeline : MonoBehaviour
     }
 
     [FMODUnity.EventRef]
-    public string selectSound;
+    public string selectBeat;
     public TimelineInfo timelineInfo;
     GCHandle timelineHandle;
 
+    [FMODUnity.EventRef]
+    public string selectMusic;
+
     FMOD.Studio.EVENT_CALLBACK beatCallback;
+    FMOD.Studio.EventInstance beatInstance;
     FMOD.Studio.EventInstance musicInstance;
 
     void Start()
@@ -51,24 +55,32 @@ public class ScriptUsageTimeline : MonoBehaviour
         // by the garbage collected while it's being used
         beatCallback = new FMOD.Studio.EVENT_CALLBACK(BeatEventCallback);
 
-        musicInstance = FMODUnity.RuntimeManager.CreateInstance(selectSound);
-        FMODUnity.RuntimeManager.AttachInstanceToGameObject(musicInstance, GetComponent<Transform>(), GetComponent<Rigidbody>());
+        beatInstance = FMODUnity.RuntimeManager.CreateInstance(selectBeat);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(beatInstance, GetComponent<Transform>(), GetComponent<Rigidbody>());
 
         // Pin the class that will store the data modified during the callback
         timelineHandle = GCHandle.Alloc(timelineInfo, GCHandleType.Pinned);
         // Pass the object through the userdata of the instance
-        musicInstance.setUserData(GCHandle.ToIntPtr(timelineHandle));
+        beatInstance.setUserData(GCHandle.ToIntPtr(timelineHandle));
 
-        musicInstance.setCallback(beatCallback, FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_BEAT | FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
+        beatInstance.setCallback(beatCallback, FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_BEAT | FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
+        beatInstance.start();
+        beatInstance.setVolume(0);
+
+        musicInstance = FMODUnity.RuntimeManager.CreateInstance(selectMusic);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(musicInstance, GetComponent<Transform>(), GetComponent<Rigidbody>());
         musicInstance.start();
     }
 
     void OnDestroy()
     {
-        musicInstance.setUserData(IntPtr.Zero);
+        beatInstance.setUserData(IntPtr.Zero);
+        beatInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        beatInstance.release();
+        timelineHandle.Free();
+
         musicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         musicInstance.release();
-        timelineHandle.Free();
     }
 
     [AOT.MonoPInvokeCallback(typeof(FMOD.Studio.EVENT_CALLBACK))]
@@ -107,5 +119,9 @@ public class ScriptUsageTimeline : MonoBehaviour
             }
         }
         return FMOD.RESULT.OK;
+    }
+
+    public void MakeBeatLoud() {
+        beatInstance.setVolume(1);
     }
 }

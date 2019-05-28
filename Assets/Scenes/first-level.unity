@@ -1165,7 +1165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf40ab60e73cd5441bb3a0388d13467c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectSound: event:/beat
+  selectBeat: event:/beat
+  selectMusic: event:/zene
 --- !u!4 &1986667203
 Transform:
   m_ObjectHideFlags: 0

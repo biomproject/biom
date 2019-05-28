@@ -120,11 +120,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: C:\Users\mezoi\Desktop\biom2\BiomGame\FMOD\Build\Desktop\Master Bank.bank
-  lastModified: 636944703575693664
+  lastModified: 636946281918493826
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 2285312
+    Value: 2286048
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -149,13 +149,14 @@ MonoBehaviour:
   - {fileID: 1488543093773045814}
   - {fileID: 5011670744927296132}
   - {fileID: -4617206273703296646}
+  - {fileID: 5336204224069690697}
   MasterBanks:
   - {fileID: 114311873499310790}
   - {fileID: 114839945948297324}
   - {fileID: 114109052807052792}
   StringsBanks:
   - {fileID: 114974231300834194}
-  stringsBankWriteTime: 636944703575783432
+  stringsBankWriteTime: 636946281918573613
   cacheVersion: 3
 --- !u!114 &114106264179830602
 MonoBehaviour:
@@ -250,11 +251,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: FMOD\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636944703575783432
+  lastModified: 636946281918573613
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 952
+    Value: 988
   Exists: 1
 --- !u!114 &1279691167742475114
 MonoBehaviour:
@@ -321,6 +322,29 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 300
   Length: 843
+--- !u!114 &5336204224069690697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/zene
+  guid: 2fb7192a7a7de944b1868cdbe1f36f80
+  Banks:
+  - {fileID: -4076149992242787838}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 64000
 --- !u!114 &7552273109888787417
 MonoBehaviour:
   m_ObjectHideFlags: 0

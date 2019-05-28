@@ -30,6 +30,7 @@ public class MenuObject : MonoBehaviour {
                 isTitleUp = false;
                 isTutorialUp = true;
                 anim.Play("title_tut_anim");
+                scriptUsageTimeline.MakeBeatLoud();
             }
             return;
         }
