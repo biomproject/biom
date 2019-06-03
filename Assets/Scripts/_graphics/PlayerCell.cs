@@ -189,4 +189,17 @@ public class PlayerCell : MonoBehaviour {
     private void HoverAnimStopped() {
         hoverAnimIsPlaying = false;
     }
+
+    public void Destroyed() {
+        wallAnim.Play("destroyed");
+        SpriteRenderer sr = shine.GetComponent<SpriteRenderer>();
+        sr.transform.Translate(-1000, -1000, -1000);
+        SpriteRenderer sr2 = redBloodCells.GetComponent<SpriteRenderer>();
+        sr2.transform.Translate(-1000, -1000, -1000);
+        Invoke("DestroyThis", 0.3f);
+    }
+
+    private void DestroyThis() {
+        Destroy(gameObject);
+    }
 }
