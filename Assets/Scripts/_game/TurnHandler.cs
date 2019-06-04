@@ -79,6 +79,10 @@ public class TurnHandler : MonoBehaviour {
 	}
 
 	void Update () {
+		if (Input.GetKey ("escape")) {
+            Application.Quit();
+        }
+
 		ResetDraw();
 		DrawNeighbors();
 		DrawHoverAndFurthest();
