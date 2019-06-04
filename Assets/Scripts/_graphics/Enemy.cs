@@ -7,10 +7,8 @@ public class Enemy : MonoBehaviour {
     public HexCoordinates coordinates;
     public bool isEaten;
     public PlayerCell beingEatenBy;
-    public int hp = 1;
-    public int movement = 0;
+    public int hp = 4;
     Animator anim;
-
 
     void Awake() {
         foreach (Transform child in transform) {
@@ -21,25 +19,16 @@ public class Enemy : MonoBehaviour {
     }
 
     public void ChangePosition(HexCoordinates position) {
-        if (hp < 1) {
-            return;
-        }
+        transform.position = HexCoordinates.ToPosition(position);
         coordinates = position;
-        movement += 1;
-        anim.Play("movement");
-        Invoke("SetPosition", 0.15f);
-    }
-
-    private void SetPosition() {
-        transform.position = HexCoordinates.ToPosition(coordinates);
     }
 
     public void SetHp(int newHp) {
         hp = newHp;
         if (newHp < 1) {
-            anim.Play("nothing");
+            anim.Play("eaten");
             return;
         }
-        // anim.Play("eaten" + newHp.ToString());
+        anim.Play("eaten" + newHp.ToString());
     }
 }

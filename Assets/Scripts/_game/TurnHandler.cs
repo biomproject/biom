@@ -94,7 +94,7 @@ public class TurnHandler : MonoBehaviour {
 		}
 		if (previousOffbeat != scriptUsageTimeline.timelineInfo.currentOffbeatBar) {
 			previousOffbeat = scriptUsageTimeline.timelineInfo.currentOffbeatBar;
-			DoEnemyTurn();
+			DoFight();
 		}
 	}
 
@@ -234,7 +234,7 @@ public class TurnHandler : MonoBehaviour {
 	void DoTurn() {
 		MovePlayer();
 		RedrawPlayer();
-		DoFight();
+		MoveNotEatenEnemies();
 
 		hexGrid.touchedCell = null;
 		hexGrid.furthestCell = null;
@@ -415,6 +415,17 @@ public class TurnHandler : MonoBehaviour {
 		return hexCell.GetNeighbor(currentHexDirection).status == HexCellStatus.PLAYER;
 	}
 
+	private void MoveNotEatenEnemies() {
+		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
+			if (enemyCells[i].isEaten) {
+				return;
+			}
+			HexCell currentEnemyCell = Array.Find(hexGrid.cells, cell => cell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
+			HexCoordinates target = currentEnemyCell.GetNeighbor(HexDirection.SW).coordinates;
+			enemyCells[i].ChangePosition(target);
+			enemyCells[i].coordinates = target;
+		}
+	}
 	private void DoFight() {
 		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
 			if (enemyCells[i].hp < 1) {
@@ -429,47 +440,6 @@ public class TurnHandler : MonoBehaviour {
 			enemyCells[i].beingEatenBy = cellEating;
 			cellEating.isEating = enemyCells[i];
 			Debug.Log(enemyCells[i].hp);
-		}
-	}
-
-	private void MoveNotEatenEnemies() {
-		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
-			if (enemyCells[i].isEaten || enemyCells[i].hp < 1) {
-				return;
-			}
-			HexCell currentEnemyCell = Array.Find(hexGrid.cells, cell => cell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
-			if (enemyCells[i].movement % 2 == 0) {
-				HexCoordinates target = currentEnemyCell.GetNeighbor(HexDirection.SW).coordinates;
-				enemyCells[i].ChangePosition(target);
-			} else {
-				HexCoordinates target = currentEnemyCell.GetNeighbor(HexDirection.NE).coordinates;
-				enemyCells[i].ChangePosition(target);
-			}
-		}
-	}
-	private void DoEnemyTurn() {
-		MoveNotEatenEnemies();
-		DestroyPlayerCells();
-	}
-
-	private void DestroyPlayerCells() {
-		for(int i = 0; i < currentLevel.enemyCoordinates.Length; i++) {
-			if (enemyCells[i].isEaten || enemyCells[i].hp < 1) {
-				return;
-			}
-			PlayerCell playerCell = Array.Find(playerCells, cell => cell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
-
-			if (playerCell) {
-				HexCell[] playerHexCells = hexGrid.getCellsByStatus(HexCellStatus.PLAYER);
-				HexCell playerHexCell = Array.Find(playerHexCells, hexCell => hexCell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
-				playerHexCell.status = HexCellStatus.EMPTY;
-				playerCell.Destroyed();
-
-				int index = Array.FindIndex(playerCells, cell => cell.coordinates.ToString() == enemyCells[i].coordinates.ToString());
-				var foos = new List<PlayerCell>(playerCells);
-				foos.RemoveAt(index);
-				playerCells = foos.ToArray();
-			}
 		}
 	}
 }

@@ -1135,9 +1135,7 @@ MonoBehaviour:
     z: 7
   - x: 0
     z: 15
-  enemyCoordinates:
-  - x: 3
-    z: 14
+  enemyCoordinates: []
 --- !u!1 &1986667201
 GameObject:
   m_ObjectHideFlags: 0

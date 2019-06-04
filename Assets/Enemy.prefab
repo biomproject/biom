@@ -148,5 +148,4 @@ MonoBehaviour:
     z: 0
   isEaten: 0
   beingEatenBy: {fileID: 0}
-  hp: 1
-  movement: 0
+  hp: 3
